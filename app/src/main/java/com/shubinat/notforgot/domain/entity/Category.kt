@@ -1,7 +1,7 @@
 package com.shubinat.notforgot.domain.entity
 
 data class Category(
-    val id: Int,
+    var id: Int,
     val name: String,
     val user: User
 )
