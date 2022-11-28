@@ -6,5 +6,5 @@ import com.shubinat.notforgot.domain.entity.User
 interface NoteRepository {
     fun addNote(note: Note)
     fun editNote(note: Note)
-    fun getNotes(user: User)
+    fun getNotes(user: User) : List<Note>
 }
