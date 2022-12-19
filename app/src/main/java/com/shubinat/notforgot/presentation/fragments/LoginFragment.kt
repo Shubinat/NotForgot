@@ -88,7 +88,7 @@ class LoginFragment : Fragment() {
 
         observeViewModel()
         addTextChangeListeners()
-       addClickListeners()
+        addClickListeners()
     }
 
     private fun addClickListeners() {

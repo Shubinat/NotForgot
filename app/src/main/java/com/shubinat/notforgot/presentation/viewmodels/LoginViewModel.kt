@@ -40,10 +40,16 @@ class LoginViewModel(application: Application) : AndroidViewModel(application) {
 
         if (loginError.value == false && passwordError.value== false){
             try {
-                authorizeUserUseCase(
+                val user = authorizeUserUseCase(
                     LoginUser(login.get() ?: "", password.get() ?: "")
                 )
-            } catch (ex: RuntimeException) {
+                if (user != null){
+                    
+                } else{
+                    Toast.makeText(getApplication(), "Неверный логин или пароль", Toast.LENGTH_SHORT)
+                        .show()
+                }
+            } catch (ex: Exception) {
                 Toast.makeText(getApplication(), "Произошла ошибка авторизации", Toast.LENGTH_SHORT)
                     .show()
             }

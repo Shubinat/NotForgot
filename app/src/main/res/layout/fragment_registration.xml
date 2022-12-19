@@ -3,7 +3,11 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".presentation.fragments.RegistrationFragment">
-
+    <data>
+        <variable
+            name="viewModel"
+            type="com.shubinat.notforgot.presentation.viewmodels.RegistrationViewModel" />
+    </data>
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -53,7 +57,8 @@
                             android:layout_height="wrap_content"
                             android:inputType="text"
                             android:textColorHint="#616161"
-                            tools:ignore="TextContrastCheck" />
+                            tools:ignore="TextContrastCheck"
+                            android:text="@={viewModel.userName}"/>
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <com.google.android.material.textfield.TextInputLayout
@@ -69,7 +74,8 @@
                             android:hint="@string/registration_email_hint"
                             android:inputType="textEmailAddress"
                             android:textColorHint="#616161"
-                            tools:ignore="TextContrastCheck" />
+                            tools:ignore="TextContrastCheck"
+                            android:text="@={viewModel.login}"/>
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <com.google.android.material.textfield.TextInputLayout
@@ -86,7 +92,8 @@
                             android:inputType="textPassword"
                             android:password="true"
                             android:textColorHint="#616161"
-                            tools:ignore="TextContrastCheck" />
+                            tools:ignore="TextContrastCheck"
+                            android:text="@={viewModel.password}"/>
 
                     </com.google.android.material.textfield.TextInputLayout>
 
@@ -104,7 +111,8 @@
                             android:inputType="textPassword"
                             android:password="true"
                             android:textColorHint="#616161"
-                            tools:ignore="TextContrastCheck" />
+                            tools:ignore="TextContrastCheck"
+                            android:text="@={viewModel.retryPassword}"/>
 
                     </com.google.android.material.textfield.TextInputLayout>
 
@@ -113,7 +121,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@string/registration_button_reg_text"
-                        tools:ignore="DuplicateSpeakableTextCheck" />
+                        tools:ignore="DuplicateSpeakableTextCheck"
+                        android:onClick="@{() -> viewModel.register()}"/>
 
                 </LinearLayout>
             </androidx.cardview.widget.CardView>

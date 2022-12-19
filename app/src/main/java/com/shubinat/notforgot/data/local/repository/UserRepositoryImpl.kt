@@ -18,13 +18,10 @@ object UserRepositoryImpl : UserRepository {
 
     private var idCounter = 7
 
-    override fun authorizeUser(authData: LoginUser): User {
+    override fun authorizeUser(authData: LoginUser): User? {
         return users.firstOrNull {
             it.login == authData.login && it.password == authData.password
-        } ?: throw RuntimeException(
-            "User with login: ${authData.login} and password: " +
-                    "${authData.password} not found"
-        )
+        }
 
     }
 
