@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.shubinat.notforgot.databinding.FragmentLoginBinding
@@ -34,6 +35,7 @@ class RegistrationFragment : Fragment(), RegistrationViewModel.SuccessRegistrati
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        (activity as AppCompatActivity).supportActionBar?.hide()
         binding.viewModel = viewModel
         viewModel.successRegistrationListener = this
         observeViewModel()

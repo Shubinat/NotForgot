@@ -15,4 +15,7 @@
     <string name="registration_retry_password_hint">Повторите пароль</string>
     <string name="registration_button_reg_text">Регистрация</string>
     <string name="registration_text_input_error">Поле не может быть пустым</string>
+    <!-- Main Fragment -->
+    <string name="main_btn_add_description">Добавить новую заметку</string>
+    <string name="main_empty_list_text">У вас пока нет дел.\nСчастливый вы человек!</string>
 </resources>

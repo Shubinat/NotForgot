@@ -15,8 +15,9 @@ import androidx.navigation.fragment.findNavController
 import com.shubinat.notforgot.databinding.FragmentLoginBinding
 import com.shubinat.notforgot.presentation.viewmodels.LoginViewModel
 import com.shubinat.notforgot.R
+import com.shubinat.notforgot.domain.entity.User
 
-class LoginFragment : Fragment() {
+class LoginFragment : Fragment(), LoginViewModel.SuccessAuthorizationListener {
 
     private var _binding: FragmentLoginBinding? = null
     private val binding: FragmentLoginBinding
@@ -51,41 +52,41 @@ class LoginFragment : Fragment() {
 
     private fun addTextChangeListeners() {
         binding.etEmail.addTextChangedListener(object : TextWatcher {
-                override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-
-                }
-
-                override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-
-                }
-
-                override fun afterTextChanged(p0: Editable?) {
-                    viewModel.resetLoginError()
-                }
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
 
             }
+
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+
+            }
+
+            override fun afterTextChanged(p0: Editable?) {
+                viewModel.resetLoginError()
+            }
+
+        }
         )
 
         binding.etPassword.addTextChangedListener(object : TextWatcher {
-                override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
 
-                }
-
-                override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-
-                }
-
-                override fun afterTextChanged(p0: Editable?) {
-                    viewModel.resetPasswordError()
-                }
             }
+
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+
+            }
+
+            override fun afterTextChanged(p0: Editable?) {
+                viewModel.resetPasswordError()
+            }
+        }
         )
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         (activity as AppCompatActivity).supportActionBar?.hide()
         binding.viewModel = viewModel
-
+        viewModel.successAuthorizationListener = this
         observeViewModel()
         addTextChangeListeners()
         addClickListeners()
@@ -102,5 +103,11 @@ class LoginFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    override fun successAuthorization(user: User) {
+        findNavController().navigate(
+            LoginFragmentDirections.actionLoginFragmentToMainFragment(user)
+        )
     }
 }

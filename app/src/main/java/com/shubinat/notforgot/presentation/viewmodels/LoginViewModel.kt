@@ -8,8 +8,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.shubinat.notforgot.data.local.repository.UserRepositoryImpl
 import com.shubinat.notforgot.domain.entity.LoginUser
+import com.shubinat.notforgot.domain.entity.User
 import com.shubinat.notforgot.domain.usecases.users.AuthorizeUserUseCase
-import com.shubinat.notforgot.domain.usecases.users.RegisterUserUseCase
 
 class LoginViewModel(application: Application) : AndroidViewModel(application) {
 
@@ -28,6 +28,8 @@ class LoginViewModel(application: Application) : AndroidViewModel(application) {
     val passwordError: LiveData<Boolean>
         get() = _passwordError
 
+    var successAuthorizationListener : SuccessAuthorizationListener? = null
+
     fun login() {
 
         if (login.get().isNullOrEmpty()) {
@@ -38,15 +40,19 @@ class LoginViewModel(application: Application) : AndroidViewModel(application) {
             _passwordError.value = true
         }
 
-        if (loginError.value == false && passwordError.value== false){
+        if (loginError.value == false && passwordError.value == false) {
             try {
                 val user = authorizeUserUseCase(
                     LoginUser(login.get() ?: "", password.get() ?: "")
                 )
-                if (user != null){
-                    
-                } else{
-                    Toast.makeText(getApplication(), "Неверный логин или пароль", Toast.LENGTH_SHORT)
+                if (user != null) {
+                    successAuthorizationListener?.successAuthorization(user)
+                } else {
+                    Toast.makeText(
+                        getApplication(),
+                        "Неверный логин или пароль",
+                        Toast.LENGTH_SHORT
+                    )
                         .show()
                 }
             } catch (ex: Exception) {
@@ -64,5 +70,9 @@ class LoginViewModel(application: Application) : AndroidViewModel(application) {
 
     fun resetPasswordError() {
         _passwordError.value = false
+    }
+
+    interface SuccessAuthorizationListener {
+        fun successAuthorization(user: User)
     }
 }

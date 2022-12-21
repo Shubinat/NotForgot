@@ -1,27 +1,16 @@
 package com.shubinat.notforgot.presentation.viewmodels
 
 import android.app.Application
-import android.app.Application.ActivityLifecycleCallbacks
 import android.widget.Toast
 import androidx.databinding.ObservableField
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.navigation.fragment.NavHostFragment.Companion.findNavController
-import androidx.navigation.fragment.findNavController
 import com.shubinat.notforgot.data.local.repository.UserRepositoryImpl
 import com.shubinat.notforgot.domain.entity.User
-import com.shubinat.notforgot.domain.usecases.users.AuthorizeUserUseCase
 import com.shubinat.notforgot.domain.usecases.users.RegisterUserUseCase
-import com.shubinat.notforgot.presentation.fragments.LoginFragmentDirections
 
 class RegistrationViewModel(application: Application) : AndroidViewModel(application) {
-
-    interface SuccessRegistrationListener {
-        fun successRegistration()
-    }
-
     val repository = UserRepositoryImpl
 
     val registerUserUseCase = RegisterUserUseCase(repository)
@@ -112,5 +101,9 @@ class RegistrationViewModel(application: Application) : AndroidViewModel(applica
 
     fun resetRetryPasswordError() {
         _retryPasswordError.value = false
+    }
+
+    interface SuccessRegistrationListener {
+        fun successRegistration()
     }
 }
