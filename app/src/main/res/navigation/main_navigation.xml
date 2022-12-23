@@ -29,5 +29,33 @@
         <argument
             android:name="authUser"
             app:argType="com.shubinat.notforgot.domain.entity.User" />
+        <action
+            android:id="@+id/action_mainFragment_to_noteEditorFragment"
+            app:destination="@id/noteEditorFragment" />
+        <action
+            android:id="@+id/action_mainFragment_to_noteDetailsFragment"
+            app:destination="@id/noteDetailsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/noteDetailsFragment"
+        android:name="com.shubinat.notforgot.presentation.fragments.NoteDetailsFragment"
+        android:label="fragment_note_details"
+        tools:layout="@layout/fragment_note_details" >
+        <action
+            android:id="@+id/action_noteDetailsFragment_to_noteEditorFragment"
+            app:destination="@id/noteEditorFragment" />
+        <argument
+            android:name="selectedNote"
+            app:argType="com.shubinat.notforgot.domain.entity.Note" />
+    </fragment>
+    <fragment
+        android:id="@+id/noteEditorFragment"
+        android:name="com.shubinat.notforgot.presentation.fragments.NoteEditorFragment"
+        android:label="fragment_note_editor"
+        tools:layout="@layout/fragment_note_editor" >
+        <argument
+            android:name="editableNote"
+            app:argType="com.shubinat.notforgot.domain.entity.Note"
+            app:nullable="true" />
     </fragment>
 </navigation>

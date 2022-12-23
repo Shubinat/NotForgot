@@ -10,7 +10,7 @@ class NoteHeaderViewHolder(private val binding: ItemNoteHeaderBinding) :
 
     override fun bind(data: NoteListItem) {
         if (data is CategoryItem) {
-            binding.textViewHeader.text = data.category.name
+            binding.textViewHeader.text = data.category?.name ?: "Без категории"
         } else {
             throw RuntimeException("data is not CategoryItem")
         }

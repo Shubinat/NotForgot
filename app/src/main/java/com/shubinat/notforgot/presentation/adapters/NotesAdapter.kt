@@ -17,52 +17,11 @@ import com.shubinat.notforgot.presentation.viewholders.NoteHeaderViewHolder
 import com.shubinat.notforgot.presentation.viewholders.NoteViewHolder
 import java.util.Date
 
-class NotesAdapter : RecyclerView.Adapter<BaseNoteViewHolder>() {
+class NotesAdapter(private val list : List<NoteListItem>) : RecyclerView.Adapter<BaseNoteViewHolder>() {
 
-    private val list = listOf(
-        CategoryItem(Category(1, "Работа", User(1, "", "", ""))),
-        NoteItem(
-            Note(
-                1,
-                "Погладить котика",
-                "Нежно",
-                Date(2022, 10, 2),
-                Date(2022, 10, 2),
-                true,
-                null,
-                Priority.LOW,
-                User(1, "", "", "")
-            )
-        ),
-        NoteItem(
-            Note(
-                1,
-                "Сделать уроки",
-                "Быстро",
-                Date(2022, 10, 2),
-                Date(2022, 10, 2),
-                false,
-                null,
-                Priority.MIDDLE,
-                User(1, "", "", "")
-            )
-        ),
-        CategoryItem(Category(1, "Учеба", User(1, "", "", ""))),
-        NoteItem(
-            Note(
-                1,
-                "Покормить собаку",
-                "GO! GO! GO!",
-                Date(2022, 10, 2),
-                Date(2022, 10, 2),
-                false,
-                null,
-                Priority.VERY_IMPORTANT,
-                User(1, "", "", "")
-            )
-        )
+    var onItemCheckBoxClickListener: ((Note) -> Unit)? = null
+    var onItemLongClickListener: ((Note) -> Unit)? = null
 
-    )
 
     override fun getItemViewType(position: Int): Int {
         return list[position].getType()
@@ -89,6 +48,17 @@ class NotesAdapter : RecyclerView.Adapter<BaseNoteViewHolder>() {
     override fun onBindViewHolder(holder: BaseNoteViewHolder, position: Int) {
         val item = list[position]
         holder.bind(item)
+        if (item is NoteItem) {
+            if (holder is NoteViewHolder){
+                holder.binding.checkBoxCompleted.setOnClickListener {
+                    onItemCheckBoxClickListener?.invoke(item.note)
+                }
+                holder.binding.root.setOnLongClickListener {
+                    onItemLongClickListener?.invoke(item.note)
+                    true
+                }
+            }
+        }
     }
 
     override fun onViewRecycled(holder: BaseNoteViewHolder) {
