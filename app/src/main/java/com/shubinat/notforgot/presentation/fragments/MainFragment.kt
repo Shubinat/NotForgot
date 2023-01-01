@@ -47,7 +47,8 @@ class MainFragment : Fragment() {
         binding.buttonAdd.setOnClickListener {
             findNavController().navigate(
                 MainFragmentDirections.actionMainFragmentToNoteEditorFragment(
-                    args.authUser
+                    args.authUser,
+                    null
                 )
             )
         }
@@ -69,7 +70,7 @@ class MainFragment : Fragment() {
 
     private fun setupItemLongClick(adapter: NotesAdapter) {
         adapter.onItemLongClickListener = {
-
+            findNavController().navigate(MainFragmentDirections.actionMainFragmentToNoteDetailsFragment(it.id))
         }
     }
 

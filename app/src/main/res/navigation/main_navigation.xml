@@ -14,7 +14,8 @@
             app:destination="@id/registrationFragment" />
         <action
             android:id="@+id/action_loginFragment_to_mainFragment"
-            app:destination="@id/mainFragment" />
+            app:destination="@id/mainFragment"
+            app:enterAnim="@android:anim/fade_in" />
     </fragment>
     <fragment
         android:id="@+id/registrationFragment"
@@ -31,22 +32,26 @@
             app:argType="com.shubinat.notforgot.domain.entity.User" />
         <action
             android:id="@+id/action_mainFragment_to_noteEditorFragment"
-            app:destination="@id/noteEditorFragment" />
+            app:destination="@id/noteEditorFragment"
+            app:enterAnim="@android:anim/slide_in_left"
+            app:popExitAnim="@android:anim/slide_out_right" />
         <action
             android:id="@+id/action_mainFragment_to_noteDetailsFragment"
-            app:destination="@id/noteDetailsFragment" />
+            app:destination="@id/noteDetailsFragment"
+            app:enterAnim="@android:anim/slide_in_left"
+            app:popExitAnim="@android:anim/slide_out_right" />
     </fragment>
     <fragment
         android:id="@+id/noteDetailsFragment"
         android:name="com.shubinat.notforgot.presentation.fragments.NoteDetailsFragment"
         android:label="fragment_note_details"
         tools:layout="@layout/fragment_note_details" >
+        <argument
+            android:name="selectedNoteId"
+            app:argType="integer" />
         <action
             android:id="@+id/action_noteDetailsFragment_to_noteEditorFragment"
             app:destination="@id/noteEditorFragment" />
-        <argument
-            android:name="selectedNote"
-            app:argType="com.shubinat.notforgot.domain.entity.Note" />
     </fragment>
     <fragment
         android:id="@+id/noteEditorFragment"
@@ -59,7 +64,6 @@
         <argument
             android:name="editableNote"
             app:argType="com.shubinat.notforgot.domain.entity.Note"
-            app:nullable="true"
-            android:defaultValue="@null" />
+            app:nullable="true" />
     </fragment>
 </navigation>

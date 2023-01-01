@@ -37,6 +37,10 @@
     <string name="add_category_button_ok">Ок</string>
     <string name="add_category_button_cancel">Отмена</string>
     <string name="add_category_error">Данная категория уже существует</string>
+    <!--Note Details Fragment-->
+    <string name="details_completed">Выполнено</string>
+    <string name="details_not_completed">Не выполнено</string>
+    <string name="details_button_edit">Редактировать</string>
     <!--Other-->
     <string name="null_category_name">Без категории</string>
     <string name="priority_empty">Без приоритета</string>
@@ -44,8 +48,8 @@
     <string name="priority_middle">Средний</string>
     <string name="priority_important">Высокий</string>
     <string name="priority_very_important">Очень высокий</string>
-
     <string name="date_format">%04d-%02d-%02d</string>
+
 
 
 </resources>

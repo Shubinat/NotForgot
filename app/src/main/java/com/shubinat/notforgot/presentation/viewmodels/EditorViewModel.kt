@@ -53,19 +53,19 @@ class EditorViewModel(
         ObservableField(DEFAULT_DATE_VALUE)
     }
 
-    private val _nameError = MutableLiveData<Boolean>()
+    private val _nameError = MutableLiveData(false)
     val nameError: LiveData<Boolean>
         get() = _nameError
 
-    private val _descriptionError = MutableLiveData<Boolean>()
+    private val _descriptionError = MutableLiveData(false)
     val descriptionError: LiveData<Boolean>
         get() = _descriptionError
 
-    private val _priorityError = MutableLiveData<Boolean>()
+    private val _priorityError = MutableLiveData(false)
     val priorityError: LiveData<Boolean>
         get() = _priorityError
 
-    private val _dateError = MutableLiveData<Boolean>()
+    private val _dateError = MutableLiveData(false)
     val dateError: LiveData<Boolean>
         get() = _dateError
 

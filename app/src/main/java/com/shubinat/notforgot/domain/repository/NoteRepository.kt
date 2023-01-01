@@ -7,4 +7,5 @@ interface NoteRepository {
     fun addNote(note: Note)
     fun editNote(note: Note)
     fun getNotes(user: User) : List<Note>
+    fun getNote(id: Int) : Note
 }

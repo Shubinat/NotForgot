@@ -14,6 +14,7 @@ import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.shubinat.notforgot.R
 import com.shubinat.notforgot.databinding.FragmentNoteEditorBinding
@@ -138,7 +139,7 @@ class NoteEditorFragment : Fragment(), EditorViewModel.SelectDateListener,
     private fun setupSaveClickListener() {
         binding.buttonSave.setOnClickListener {
             if (viewModel.save()) {
-                requireActivity().onBackPressed()
+                findNavController().popBackStack()
             }
         }
     }
