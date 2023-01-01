@@ -22,6 +22,9 @@ class NoteViewHolder(val binding: ItemNoteBinding) : BaseNoteViewHolder(binding.
                 checkBoxCompleted.isChecked = data.note.completed
                 frameLayoutPriority.setBackgroundResource(
                     when (data.note.priority) {
+                        Priority.EMPTY -> {
+                            R.color.white // do not use
+                        }
                         Priority.LOW -> {
                             R.color.priority_low
                         }

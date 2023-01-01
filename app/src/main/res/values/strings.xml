@@ -18,6 +18,34 @@
     <!-- Main Fragment -->
     <string name="main_btn_add_description">Добавить новую заметку</string>
     <string name="main_empty_list_text">У вас пока нет дел.\nСчастливый вы человек!</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <!-- Editor Fragment -->
+    <string name="editor_name_hint">Название</string>
+    <string name="editor_description_hint">Описание</string>
+    <string name="editor_category_description">Категория</string>
+    <string name="editor_priority_description">Приоритет</string>
+    <string name="editor_add_category_description">Добавить категорию</string>
+    <string name="editor_completion_date_description">Дата выполнения</string>
+    <string name="editor_completion_date_hint">Сделать до</string>
+    <string name="editor_button_save_text">Сохранить</string>
+    <string name="editor_name_error">Поле обязательно для заполения</string>
+    <string name="editor_description_error">Поле обязательно для заполения</string>
+    <string name="editor_date_error">Выберите дату</string>
+    <string name="editor_priority_error">Выберите приоритет</string>
+    <!-- Add Category Dialog Fragment -->
+    <string name="add_category_title">Добавить категорию</string>
+    <string name="add_category_name_hint">Название категории</string>
+    <string name="add_category_button_ok">Ок</string>
+    <string name="add_category_button_cancel">Отмена</string>
+    <string name="add_category_error">Данная категория уже существует</string>
+    <!--Other-->
+    <string name="null_category_name">Без категории</string>
+    <string name="priority_empty">Без приоритета</string>
+    <string name="priority_low">Низкий</string>
+    <string name="priority_middle">Средний</string>
+    <string name="priority_important">Высокий</string>
+    <string name="priority_very_important">Очень высокий</string>
+
+    <string name="date_format">%04d-%02d-%02d</string>
+
+
 </resources>

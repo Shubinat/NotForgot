@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.shubinat.notforgot.R
 import com.shubinat.notforgot.databinding.FragmentMainBinding
@@ -44,7 +45,11 @@ class MainFragment : Fragment() {
 
     private fun setupAddClickListener() {
         binding.buttonAdd.setOnClickListener {
-
+            findNavController().navigate(
+                MainFragmentDirections.actionMainFragmentToNoteEditorFragment(
+                    args.authUser
+                )
+            )
         }
     }
 

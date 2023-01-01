@@ -54,8 +54,12 @@
         android:label="fragment_note_editor"
         tools:layout="@layout/fragment_note_editor" >
         <argument
+            android:name="authUser"
+            app:argType="com.shubinat.notforgot.domain.entity.User" />
+        <argument
             android:name="editableNote"
             app:argType="com.shubinat.notforgot.domain.entity.Note"
-            app:nullable="true" />
+            app:nullable="true"
+            android:defaultValue="@null" />
     </fragment>
 </navigation>
