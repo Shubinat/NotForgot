@@ -46,7 +46,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     fun changeCompletedStatus(note: Note) {
-        editNoteUseCase(note)
+        editNoteUseCase(note.copy(completed = !note.completed))
     }
 
 }
