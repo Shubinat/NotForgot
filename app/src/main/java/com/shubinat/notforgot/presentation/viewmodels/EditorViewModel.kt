@@ -126,7 +126,7 @@ class EditorViewModel(
         _descriptionError.value = false
     }
 
-    fun resetPriorityError() {
+    private fun resetPriorityError() {
         _priorityError.value = false
     }
 
