@@ -5,7 +5,7 @@ import com.shubinat.notforgot.domain.entity.Note
 import com.shubinat.notforgot.domain.entity.User
 import com.shubinat.notforgot.domain.repository.CategoryRepository
 
-object CategoryRepositoryImpl :CategoryRepository {
+object CategoryRepositoryImpl : CategoryRepository {
 
     private val categories = mutableListOf<Category>()
 
@@ -13,6 +13,8 @@ object CategoryRepositoryImpl :CategoryRepository {
 
     override fun addCategory(category: Category) {
         if (category.name.isBlank()) throw RuntimeException("Name cannot be blank")
+        if (categories.firstOrNull { it.name == category.name } != null)
+            throw RuntimeException("Category with name: ${category.name} is exist")
 
         if (category.id == 0) {
             category.id = ++idCounter

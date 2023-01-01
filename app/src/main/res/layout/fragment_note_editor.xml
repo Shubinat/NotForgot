@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".presentation.fragments.NoteEditorFragment">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.shubinat.notforgot.presentation.viewmodels.EditorViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#E5E5E5">
+
+        <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="16dp"
+            android:text='@{viewModel.editMode ? "Редактировать заметку" : "Добавить заметку"}'
+            android:textColor="#636363"
+            android:textSize="22sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Добавить заметку" />
+
+        <FrameLayout
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"
+            android:background="@color/white"
+            app:layout_constraintBottom_toTopOf="@+id/button_save"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_title">
+
+            <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#FFF">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/til_name"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginTop="16dp"
+                        android:layout_marginEnd="16dp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/et_name"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="@string/editor_name_hint"
+                            android:inputType="text"
+                            android:maxLength="30"
+                            android:text="@={viewModel.name}"
+                            android:textColorHint="#616161"
+                            tools:ignore="TextContrastCheck" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/til_description"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginTop="16dp"
+                        android:layout_marginEnd="16dp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/til_name">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/et_description"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:elegantTextHeight="false"
+                            android:gravity="fill_horizontal"
+                            android:hint="@string/editor_description_hint"
+                            android:inputType="textMultiLine"
+                            android:lines="3"
+                            android:maxLength="120"
+                            android:maxLines="3"
+                            android:minLines="3"
+                            android:text="@={viewModel.description}"
+                            android:textColorHint="#616161"
+                            tools:ignore="TextContrastCheck" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <TextView
+                        android:id="@+id/tv_description_length"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text='@{viewModel.description.length() + "/120"}'
+                        app:layout_constraintEnd_toEndOf="@+id/til_description"
+                        app:layout_constraintTop_toBottomOf="@+id/til_description"
+                        tools:text="14/120" />
+                        <Spinner
+                            android:id="@+id/spinner_category"
+                            android:layout_width="0dp"
+                            android:layout_height="56dp"
+                            android:layout_marginEnd="16dp"
+                            app:layout_constraintEnd_toStartOf="@+id/button_add_category"
+                            app:layout_constraintStart_toStartOf="@+id/til_description"
+                            app:layout_constraintTop_toTopOf="@+id/button_add_category"
+                            android:background="@drawable/spinner_background"
+                            android:contentDescription="@string/editor_category_description"
+                            android:selectedItemPosition="@={viewModel.selectedCategoryPosition}"
+                            />
+
+                    <Spinner
+                        android:id="@+id/spinner_priority"
+                        android:layout_width="0dp"
+                        android:layout_height="56dp"
+                        android:layout_marginTop="16dp"
+                        android:layout_marginEnd="16dp"
+                        android:background="@drawable/spinner_background"
+                        android:contentDescription="@string/editor_priority_description"
+                        android:selectedItemPosition="@={viewModel.selectedPriorityPosition}"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="@+id/spinner_category"
+                        app:layout_constraintTop_toBottomOf="@+id/spinner_category"/>
+
+                    <com.google.android.material.floatingactionbutton.FloatingActionButton
+                        android:id="@+id/button_add_category"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:layout_marginEnd="16dp"
+                        android:clickable="true"
+                        android:contentDescription="@string/editor_add_category_description"
+                        android:focusable="true"
+                        android:onClick="@{() -> viewModel.addCategory()}"
+                        android:src="@android:drawable/ic_input_add"
+                        android:tintMode="src_in"
+                        app:backgroundTint="@color/purple_500"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/tv_description_length"
+                        app:tint="#fff" />
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/til_date"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginTop="16dp"
+                        android:layout_marginEnd="16dp"
+                        android:layout_marginBottom="16dp"
+                        android:clickable="true"
+                        android:focusable="true"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="@+id/spinner_priority"
+                        app:layout_constraintStart_toStartOf="@+id/spinner_priority"
+                        app:layout_constraintTop_toBottomOf="@+id/spinner_priority">
+
+                        <EditText
+                            android:id="@+id/et_completion_date"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:autofillHints=""
+                            android:editable="false"
+                            android:ems="10"
+                            android:enabled="true"
+                            android:focusable="false"
+                            android:hint="@string/editor_completion_date_hint"
+                            android:onClick="@{() -> viewModel.selectCompletionDate()}"
+                            android:text="@={viewModel.date}"
+                            android:textColorHighlight="@color/purple_500"
+                            android:textColorLink="@color/purple_500"
+                            tools:ignore="SpeakableTextPresentCheck,TextFields" />
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </ScrollView>
+
+        </FrameLayout>
+
+        <Button
+            android:id="@+id/button_save"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="16dp"
+            android:text="@string/editor_button_save_text"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

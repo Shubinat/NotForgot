@@ -39,4 +39,9 @@ object NoteRepositoryImpl : NoteRepository {
     override fun getNotes(user: User): List<Note> {
         return notes.filter { it.user == user }.toList()
     }
+
+    override fun getNote(id: Int): Note {
+        return notes.firstOrNull { it.id == id }
+            ?: throw RuntimeException("Note not found")
+    }
 }

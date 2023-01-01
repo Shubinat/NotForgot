@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_navigation"
+    app:startDestination="@id/loginFragment">
+
+    <fragment
+        android:id="@+id/loginFragment"
+        android:name="com.shubinat.notforgot.presentation.fragments.LoginFragment"
+        android:label="LoginFragment" >
+        <action
+            android:id="@+id/action_loginFragment_to_registrationFragment"
+            app:destination="@id/registrationFragment" />
+        <action
+            android:id="@+id/action_loginFragment_to_mainFragment"
+            app:destination="@id/mainFragment"
+            app:enterAnim="@android:anim/fade_in" />
+    </fragment>
+    <fragment
+        android:id="@+id/registrationFragment"
+        android:name="com.shubinat.notforgot.presentation.fragments.RegistrationFragment"
+        android:label="fragment_registration"
+        tools:layout="@layout/fragment_registration" />
+    <fragment
+        android:id="@+id/mainFragment"
+        android:name="com.shubinat.notforgot.presentation.fragments.MainFragment"
+        android:label="fragment_main"
+        tools:layout="@layout/fragment_main" >
+        <argument
+            android:name="authUser"
+            app:argType="com.shubinat.notforgot.domain.entity.User" />
+        <action
+            android:id="@+id/action_mainFragment_to_noteEditorFragment"
+            app:destination="@id/noteEditorFragment"
+            app:enterAnim="@android:anim/slide_in_left"
+            app:popExitAnim="@android:anim/slide_out_right" />
+        <action
+            android:id="@+id/action_mainFragment_to_noteDetailsFragment"
+            app:destination="@id/noteDetailsFragment"
+            app:enterAnim="@android:anim/slide_in_left"
+            app:popExitAnim="@android:anim/slide_out_right" />
+    </fragment>
+    <fragment
+        android:id="@+id/noteDetailsFragment"
+        android:name="com.shubinat.notforgot.presentation.fragments.NoteDetailsFragment"
+        android:label="fragment_note_details"
+        tools:layout="@layout/fragment_note_details" >
+        <argument
+            android:name="selectedNoteId"
+            app:argType="integer" />
+        <action
+            android:id="@+id/action_noteDetailsFragment_to_noteEditorFragment"
+            app:destination="@id/noteEditorFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/noteEditorFragment"
+        android:name="com.shubinat.notforgot.presentation.fragments.NoteEditorFragment"
+        android:label="fragment_note_editor"
+        tools:layout="@layout/fragment_note_editor" >
+        <argument
+            android:name="authUser"
+            app:argType="com.shubinat.notforgot.domain.entity.User" />
+        <argument
+            android:name="editableNote"
+            app:argType="com.shubinat.notforgot.domain.entity.Note"
+            app:nullable="true" />
+    </fragment>
+</navigation>
