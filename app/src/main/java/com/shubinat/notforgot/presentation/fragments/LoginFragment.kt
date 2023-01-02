@@ -84,7 +84,6 @@ class LoginFragment : Fragment(), LoginViewModel.SuccessAuthorizationListener {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        (activity as AppCompatActivity).supportActionBar?.hide()
         binding.viewModel = viewModel
         viewModel.successAuthorizationListener = this
         observeViewModel()

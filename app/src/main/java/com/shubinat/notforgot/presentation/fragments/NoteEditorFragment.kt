@@ -50,12 +50,6 @@ class NoteEditorFragment : Fragment(), EditorViewModel.SelectDateListener,
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        with((activity as AppCompatActivity)) {
-            supportActionBar?.setDisplayHomeAsUpEnabled(true)
-            supportActionBar?.setDisplayShowHomeEnabled(true)
-        }
-
         binding.viewModel = viewModel
         viewModel.selectDateListener = this
         viewModel.addCategoryListener = this
