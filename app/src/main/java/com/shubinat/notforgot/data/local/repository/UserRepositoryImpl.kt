@@ -17,6 +17,9 @@ object UserRepositoryImpl : UserRepository {
     )
 
     private var idCounter = 7
+    override fun getUser(id: Int): User {
+        TODO("Not yet implemented")
+    }
 
     override fun authorizeUser(authData: LoginUser): User? {
         return users.firstOrNull {

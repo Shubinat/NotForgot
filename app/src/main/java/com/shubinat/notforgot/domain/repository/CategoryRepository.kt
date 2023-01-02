@@ -5,5 +5,6 @@ import com.shubinat.notforgot.domain.entity.User
 
 interface CategoryRepository {
     fun addCategory(category: Category)
-    fun getCategories(user: User) : List<Category>
+    fun getCategories(user: User): List<Category>
+    fun getCategory(id: Int): Category
 }

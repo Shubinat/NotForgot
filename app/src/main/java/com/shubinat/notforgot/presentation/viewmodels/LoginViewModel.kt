@@ -6,14 +6,14 @@ import androidx.databinding.ObservableField
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.shubinat.notforgot.data.local.repository.UserRepositoryImpl
+import com.shubinat.notforgot.data.room.repository.UserRepositoryImpl
 import com.shubinat.notforgot.domain.entity.LoginUser
 import com.shubinat.notforgot.domain.entity.User
 import com.shubinat.notforgot.domain.usecases.users.AuthorizeUserUseCase
 
 class LoginViewModel(application: Application) : AndroidViewModel(application) {
 
-    val repository = UserRepositoryImpl
+    val repository = UserRepositoryImpl(application)
 
     val authorizeUserUseCase = AuthorizeUserUseCase(repository)
 

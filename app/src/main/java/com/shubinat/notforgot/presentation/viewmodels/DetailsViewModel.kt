@@ -6,7 +6,7 @@ import androidx.databinding.ObservableField
 import androidx.databinding.ObservableParcelable
 import androidx.lifecycle.AndroidViewModel
 import com.shubinat.notforgot.R
-import com.shubinat.notforgot.data.local.repository.NoteRepositoryImpl
+import com.shubinat.notforgot.data.room.repository.NoteRepositoryImpl
 import com.shubinat.notforgot.domain.entity.Note
 import com.shubinat.notforgot.domain.entity.Priority
 import com.shubinat.notforgot.domain.usecases.notes.GetNoteUseCase
@@ -14,7 +14,7 @@ import com.shubinat.notforgot.domain.usecases.notes.GetNoteUseCase
 class DetailsViewModel(private val noteId: Int, private val app: Application) :
     AndroidViewModel(app) {
 
-    private val repository = NoteRepositoryImpl
+    private val repository = NoteRepositoryImpl(app)
     private val getNoteUseCase = GetNoteUseCase(repository)
 
     val note : ObservableParcelable<Note> = ObservableParcelable<Note>()

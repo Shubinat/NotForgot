@@ -5,8 +5,8 @@ import androidx.databinding.ObservableField
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.shubinat.notforgot.data.local.repository.CategoryRepositoryImpl
-import com.shubinat.notforgot.data.local.repository.NoteRepositoryImpl
+import com.shubinat.notforgot.data.room.repository.CategoryRepositoryImpl
+import com.shubinat.notforgot.data.room.repository.NoteRepositoryImpl
 import com.shubinat.notforgot.domain.entity.Category
 import com.shubinat.notforgot.domain.entity.Note
 import com.shubinat.notforgot.domain.entity.Priority
@@ -24,8 +24,8 @@ class EditorViewModel(
 ) :
     AndroidViewModel(app) {
 
-    private val categoryRepository = CategoryRepositoryImpl
-    private val noteRepository = NoteRepositoryImpl
+    private val categoryRepository = CategoryRepositoryImpl(app)
+    private val noteRepository = NoteRepositoryImpl(app)
 
     private val getAllCategoriesUseCase = GetAllCategoriesUseCase(categoryRepository)
     private val addNoteUseCase = AddNoteUseCase(noteRepository)
