@@ -29,4 +29,8 @@ object CategoryRepositoryImpl : CategoryRepository {
     override fun getCategories(user: User): List<Category> {
         return categories.filter { it.user == user }.toList()
     }
+
+    override fun getCategory(id: Int): Category {
+        TODO("Not yet implemented")
+    }
 }

@@ -33,7 +33,7 @@ class AddCategoryDialogFragment : DialogFragment() {
     private val viewModel by lazy {
         ViewModelProvider(
             this,
-            AddCategoryViewModelFactory(authUser)
+            AddCategoryViewModelFactory(authUser, requireActivity().application)
         )[AddCategoryViewModel::class.java]
     }
 

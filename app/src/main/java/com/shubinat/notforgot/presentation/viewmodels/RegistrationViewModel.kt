@@ -6,12 +6,13 @@ import androidx.databinding.ObservableField
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.shubinat.notforgot.data.local.repository.UserRepositoryImpl
+import com.shubinat.notforgot.data.room.repository.UserRepositoryImpl
+
 import com.shubinat.notforgot.domain.entity.User
 import com.shubinat.notforgot.domain.usecases.users.RegisterUserUseCase
 
 class RegistrationViewModel(application: Application) : AndroidViewModel(application) {
-    val repository = UserRepositoryImpl
+    val repository = UserRepositoryImpl(application)
 
     val registerUserUseCase = RegisterUserUseCase(repository)
 

@@ -8,7 +8,7 @@ import android.widget.TextView
 import androidx.databinding.BindingAdapter
 import androidx.databinding.ObservableField
 import androidx.lifecycle.AndroidViewModel
-import com.shubinat.notforgot.data.local.repository.NoteRepositoryImpl
+import com.shubinat.notforgot.data.room.repository.NoteRepositoryImpl
 import com.shubinat.notforgot.domain.entity.Note
 import com.shubinat.notforgot.domain.entity.User
 import com.shubinat.notforgot.domain.usecases.notes.EditNoteUseCase
@@ -20,7 +20,8 @@ import com.shubinat.notforgot.presentation.listitems.NoteListItem
 
 class MainViewModel(application: Application) : AndroidViewModel(application) {
 
-    private val repository = NoteRepositoryImpl
+    private val repository =
+        NoteRepositoryImpl(application)
 
     private val getAllNotesUseCase = GetAllNotesUseCase(repository)
     private val editNoteUseCase = EditNoteUseCase(repository)
