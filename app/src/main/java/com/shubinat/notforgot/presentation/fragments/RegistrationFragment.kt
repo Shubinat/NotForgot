@@ -34,8 +34,6 @@ class RegistrationFragment : Fragment(), RegistrationViewModel.SuccessRegistrati
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        (activity as AppCompatActivity).supportActionBar?.hide()
         binding.viewModel = viewModel
         viewModel.successRegistrationListener = this
         observeViewModel()
