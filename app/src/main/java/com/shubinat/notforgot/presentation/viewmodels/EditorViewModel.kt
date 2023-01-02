@@ -1,9 +1,6 @@
 package com.shubinat.notforgot.presentation.viewmodels
 
 import android.app.Application
-import androidx.appcompat.widget.AppCompatSpinner
-import androidx.databinding.BindingAdapter
-import androidx.databinding.InverseBindingAdapter
 import androidx.databinding.ObservableField
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
@@ -73,38 +70,19 @@ class EditorViewModel(
     val categories: LiveData<List<String>>
         get() = _categories
 
+    private val _priorities: MutableLiveData<List<String>> = MutableLiveData()
     val priorities: LiveData<List<String>>
+        get() = _priorities
 
     init {
         loadCategoriesNames()
-
-        val priorityList = Priority.values()
-        priorities = MutableLiveData(priorityList.map { it.getStringValue(app) }.toList())
+        loadPrioritiesNames()
     }
 
 
-    var selectedCategoryPosition: Int = if (editMode) {
-        val currentPosition = categories.value!!.indexOfFirst {
-            it == note!!.category?.name
-        }
-        if (currentPosition == -1) {
-            DEFAULT_CATEGORY_SPINNER_POSITION
-        } else {
-            currentPosition
-        }
-    } else {
-        DEFAULT_CATEGORY_SPINNER_POSITION
-    }
+    var selectedCategoryPosition: Int = loadSelectedCategoryPosition()
 
-    private var _selectedPriorityPosition = if (editMode) {
-        val currentPosition = priorities.value!!.indexOfFirst {
-            it == note!!.priority.getStringValue(app)
-        }
-        currentPosition
-    } else {
-        DEFAULT_PRIORITY_SPINNER_POSITION
-    }
-
+    private var _selectedPriorityPosition = loadSelectedPriorityPosition()
     var selectedPriorityPosition: Int
         get() {
             return _selectedPriorityPosition
@@ -117,6 +95,50 @@ class EditorViewModel(
         }
 
 
+    private fun validateFields() {
+        if (name.get().toString().isBlank()) _nameError.value = true
+        if (description.get().toString().isBlank()) _descriptionError.value = true
+        if (date.get().toString().isBlank()) _dateError.value = true
+        if (selectedPriorityPosition == 0) _priorityError.value = true
+    }
+
+    private fun loadPrioritiesNames() {
+        val priorityList = Priority.values()
+        _priorities.value = priorityList.map { it.getStringValue(app) }.toList()
+    }
+
+    private fun loadSelectedPriorityPosition(): Int {
+        if (editMode) {
+            val currentPosition = priorities.value!!.indexOfFirst {
+                it == note!!.priority.getStringValue(app)
+            }
+            return currentPosition
+        }
+        return DEFAULT_PRIORITY_SPINNER_POSITION
+    }
+
+    private fun loadSelectedCategoryPosition(): Int {
+        if (editMode) {
+            val currentPosition = categories.value!!.indexOfFirst {
+                it == note!!.category?.name
+            }
+            if (currentPosition == -1)
+                return DEFAULT_CATEGORY_SPINNER_POSITION
+            return currentPosition
+        }
+        return DEFAULT_CATEGORY_SPINNER_POSITION
+    }
+
+    private fun resetPriorityError() {
+        _priorityError.value = false
+    }
+
+    fun loadCategoriesNames() {
+        val categoriesList = mutableListOf<Category>()
+        categoriesList.addAll(getAllCategoriesUseCase(authUser))
+        categoriesList.add(0, Category.getNullCategory(app, authUser))
+        _categories.value = categoriesList.map { it.name }.toList()
+    }
 
     fun resetNameError() {
         _nameError.value = false
@@ -126,19 +148,20 @@ class EditorViewModel(
         _descriptionError.value = false
     }
 
-    private fun resetPriorityError() {
-        _priorityError.value = false
-    }
-
     fun resetDateError() {
         _dateError.value = false
     }
 
+    fun selectCompletionDate() {
+        selectDateListener?.selectDate()
+    }
+
+    fun addCategory() {
+        addCategoryListener?.addCategory()
+    }
+
     fun save(): Boolean {
-        if (name.get().toString().isBlank()) _nameError.value = true
-        if (description.get().toString().isBlank()) _descriptionError.value = true
-        if (date.get().toString().isBlank()) _dateError.value = true
-        if (selectedPriorityPosition == 0) _priorityError.value = true
+        validateFields()
 
         if (_nameError.value == false &&
             _descriptionError.value == false &&
@@ -154,7 +177,6 @@ class EditorViewModel(
             val priorities = Priority.values()
             val priority = priorities[selectedPriorityPosition]
             if (editMode) {
-
                 editNoteUseCase(
                     note!!.copy(
                         title = name.get().toString(),
@@ -182,21 +204,6 @@ class EditorViewModel(
             return true
         }
         return false
-    }
-
-    fun loadCategoriesNames() {
-        val categoriesList = mutableListOf<Category>()
-        categoriesList.addAll(getAllCategoriesUseCase(authUser))
-        categoriesList.add(0, Category.getNullCategory(app, authUser))
-        _categories.value = categoriesList.map { it.name }.toList()
-    }
-
-    fun selectCompletionDate() {
-        selectDateListener?.selectDate()
-    }
-
-    fun addCategory() {
-        addCategoryListener?.addCategory()
     }
 
     interface SelectDateListener {
