@@ -1,10 +1,8 @@
 package com.shubinat.notforgot.presentation.viewmodels
 
-import android.annotation.SuppressLint
 import android.app.Application
 import android.graphics.drawable.Drawable
 import androidx.databinding.ObservableField
-import androidx.databinding.ObservableInt
 import androidx.databinding.ObservableParcelable
 import androidx.lifecycle.AndroidViewModel
 import com.shubinat.notforgot.R
@@ -28,7 +26,15 @@ class DetailsViewModel(private val noteId: Int, private val app: Application) :
         load()
     }
 
-    private fun getPriorityBackground(note: Note): Int {
+    fun load() {
+        val currentNote = getNoteUseCase(noteId)
+        note.set(currentNote)
+        categoryName.set(currentNote.category?.name ?: app.getString(R.string.null_category_name))
+        priorityName.set(currentNote.priority.getStringValue(app))
+        priorityBackground.set(app.getDrawable(getPriorityBackgroundResource(currentNote)))
+    }
+
+    private fun getPriorityBackgroundResource(note: Note): Int {
         return when (note.priority) {
             Priority.EMPTY -> R.color.white
             Priority.LOW -> R.drawable.priority_low_background
@@ -36,13 +42,5 @@ class DetailsViewModel(private val noteId: Int, private val app: Application) :
             Priority.IMPORTANT -> R.drawable.priority_important_background
             Priority.VERY_IMPORTANT -> R.drawable.priority_very_important_background
         }
-    }
-
-    fun load() {
-        val currentNote = getNoteUseCase(noteId)
-        note.set(currentNote)
-        categoryName.set(currentNote.category?.name ?: app.getString(R.string.null_category_name))
-        priorityName.set(currentNote.priority.getStringValue(app))
-        priorityBackground.set(app.getDrawable(getPriorityBackground(currentNote)))
     }
 }

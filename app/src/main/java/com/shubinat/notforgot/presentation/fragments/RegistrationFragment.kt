@@ -112,12 +112,12 @@ class RegistrationFragment : Fragment(), RegistrationViewModel.SuccessRegistrati
         })
     }
 
+    override fun successRegistration() {
+        findNavController().popBackStack()
+    }
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
-    }
-
-    override fun successRegistration() {
-        findNavController().popBackStack()
     }
 }
