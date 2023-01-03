@@ -11,7 +11,7 @@ import com.shubinat.notforgot.data.room.repository.UserRepositoryImpl
 
 import com.shubinat.notforgot.domain.entity.User
 import com.shubinat.notforgot.domain.usecases.users.RegisterUserUseCase
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 
 class RegistrationViewModel(application: Application) : AndroidViewModel(application) {
     val repository = UserRepositoryImpl(application)
@@ -70,34 +70,60 @@ class RegistrationViewModel(application: Application) : AndroidViewModel(applica
             passwordError.value == false &&
             retryPasswordError.value == false
         ) {
-            viewModelScope.launch {
-                try {
-                    _loading.value = true
-                    registerUserUseCase(
-                        User(
-                            0,
-                            userName.get() ?: "",
-                            login.get() ?: "",
-                            password.get() ?: ""
-                        )
-                    )
-                    successRegistrationListener?.successRegistration()
 
-                } catch (ex: RuntimeException) {
-                    Toast.makeText(
-                        getApplication(),
-                        "Пользователь с данным логином уже существует",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                } catch (ex: Exception) {
-                    Toast.makeText(
-                        getApplication(),
-                        "Ошибка регистрации",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                } finally {
-                    _loading.value = false
+            val operation = viewModelScope.async(Dispatchers.IO) {
+                registerUserUseCase(
+                    User(
+                        0,
+                        userName.get() ?: "",
+                        login.get() ?: "",
+                        password.get() ?: ""
+                    )
+                )
+            }
+            viewModelScope.launch(Dispatchers.Main) {
+
+                delay(100)
+                if (operation.isActive) {
+                    try {
+                        _loading.value = true
+                        operation.await()
+                        successRegistrationListener?.successRegistration()
+                    } catch (ex: RuntimeException) {
+                        Toast.makeText(
+                            getApplication(),
+                            "Пользователь с данным логином уже существует",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    } catch (ex: Exception) {
+                        Toast.makeText(
+                            getApplication(),
+                            "Ошибка регистрации",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    } finally {
+                        _loading.value = false
+                    }
+                } else {
+                    try {
+                        operation.await()
+                        successRegistrationListener?.successRegistration()
+                    } catch (ex: RuntimeException) {
+                        Toast.makeText(
+                            getApplication(),
+                            "Пользователь с данным логином уже существует",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    } catch (ex: Exception) {
+                        Toast.makeText(
+                            getApplication(),
+                            "Ошибка регистрации",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
                 }
+
+
             }
         }
 

@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import com.shubinat.notforgot.R
 import com.shubinat.notforgot.databinding.FragmentLoginBinding
 import com.shubinat.notforgot.databinding.FragmentRegistrationBinding
 import com.shubinat.notforgot.presentation.viewmodels.RegistrationViewModel
@@ -38,8 +39,23 @@ class RegistrationFragment : Fragment(), RegistrationViewModel.SuccessRegistrati
         viewModel.successRegistrationListener = this
         observeViewModel()
         registerTextChangedListeners()
+        setupLoadingDialog()
     }
 
+    private fun setupLoadingDialog() {
+        viewModel.loading.observe(viewLifecycleOwner) {
+            if (it) {
+                val dialog = LoadingDialogFragment.newInstance(getString(R.string.message_register))
+                dialog.show(parentFragmentManager, LoadingDialogFragment.TAG)
+            } else{
+                val prev = parentFragmentManager.findFragmentByTag(LoadingDialogFragment.TAG)
+                if (prev != null) {
+                    val dialog = prev as LoadingDialogFragment
+                    dialog.dismiss()
+                }
+            }
+        }
+    }
     private fun observeViewModel() {
         viewModel.userNameError.observe(viewLifecycleOwner) {
             binding.tilName.error = if (it) "Поле не может быть пустым" else null
