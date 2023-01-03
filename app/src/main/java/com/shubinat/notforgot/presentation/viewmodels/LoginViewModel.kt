@@ -6,10 +6,13 @@ import androidx.databinding.ObservableField
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
+import com.shubinat.notforgot.R
 import com.shubinat.notforgot.data.room.repository.UserRepositoryImpl
 import com.shubinat.notforgot.domain.entity.LoginUser
 import com.shubinat.notforgot.domain.entity.User
 import com.shubinat.notforgot.domain.usecases.users.AuthorizeUserUseCase
+import kotlinx.coroutines.*
 
 class LoginViewModel(application: Application) : AndroidViewModel(application) {
 
@@ -28,7 +31,11 @@ class LoginViewModel(application: Application) : AndroidViewModel(application) {
     val passwordError: LiveData<Boolean>
         get() = _passwordError
 
-    var successAuthorizationListener : SuccessAuthorizationListener? = null
+    private val _loading = MutableLiveData<Boolean>()
+    val loading: LiveData<Boolean>
+        get() = _loading
+
+    var successAuthorizationListener: SuccessAuthorizationListener? = null
 
     fun login() {
 
@@ -41,27 +48,51 @@ class LoginViewModel(application: Application) : AndroidViewModel(application) {
         }
 
         if (loginError.value == false && passwordError.value == false) {
-            try {
-                val user = authorizeUserUseCase(
+
+            val operation = viewModelScope.async(Dispatchers.IO) {
+                authorizeUserUseCase(
                     LoginUser(login.get() ?: "", password.get() ?: "")
                 )
-                if (user != null) {
-                    successAuthorizationListener?.successAuthorization(user)
-                } else {
-                    Toast.makeText(
-                        getApplication(),
-                        "Неверный логин или пароль",
-                        Toast.LENGTH_SHORT
-                    )
-                        .show()
-                }
-            } catch (ex: Exception) {
-                Toast.makeText(getApplication(), "Произошла ошибка авторизации", Toast.LENGTH_SHORT)
-                    .show()
             }
+
+            viewModelScope.launch(Dispatchers.Main) {
+                delay(100)
+                if (operation.isActive) {
+                    try {
+                        _loading.value = true
+
+                        val user = operation.await()
+                        onLogin(user)
+
+                    } catch (ex: Exception) {
+                        Toast.makeText(
+                            getApplication(),
+                            getApplication<Application>().getString(R.string.auth_error),
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    } finally {
+                        _loading.value = false
+                    }
+                } else {
+                    val user = operation.await()
+                    onLogin(user)
+                }
+            }
+
         }
+    }
 
-
+    private fun onLogin(user: User?) {
+        if (user != null) {
+            successAuthorizationListener?.successAuthorization(user)
+        } else {
+            Toast.makeText(
+                getApplication(),
+                getApplication<Application>().getString(R.string.auth_invalid),
+                Toast.LENGTH_SHORT
+            )
+                .show()
+        }
     }
 
     fun resetLoginError() {

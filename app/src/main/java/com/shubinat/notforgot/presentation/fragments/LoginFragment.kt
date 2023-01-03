@@ -3,19 +3,17 @@ package com.shubinat.notforgot.presentation.fragments
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AppCompatActivity
-import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
-import com.shubinat.notforgot.databinding.FragmentLoginBinding
-import com.shubinat.notforgot.presentation.viewmodels.LoginViewModel
 import com.shubinat.notforgot.R
+import com.shubinat.notforgot.databinding.FragmentLoginBinding
 import com.shubinat.notforgot.domain.entity.User
+import com.shubinat.notforgot.presentation.viewmodels.LoginViewModel
+
 
 class LoginFragment : Fragment(), LoginViewModel.SuccessAuthorizationListener {
 
@@ -89,6 +87,22 @@ class LoginFragment : Fragment(), LoginViewModel.SuccessAuthorizationListener {
         observeViewModel()
         addTextChangeListeners()
         addClickListeners()
+        setupLoadingDialog()
+    }
+
+    private fun setupLoadingDialog() {
+        viewModel.loading.observe(viewLifecycleOwner) {
+            if (it) {
+                val dialog = LoadingDialogFragment.newInstance(getString(R.string.message_auth))
+                dialog.show(parentFragmentManager, LoadingDialogFragment.TAG)
+            } else{
+                val prev = parentFragmentManager.findFragmentByTag(LoadingDialogFragment.TAG)
+                if (prev != null) {
+                    val dialog = prev as LoadingDialogFragment
+                    dialog.dismiss()
+                }
+            }
+        }
     }
 
     private fun addClickListeners() {
