@@ -6,10 +6,12 @@ import androidx.databinding.ObservableField
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
 import com.shubinat.notforgot.data.room.repository.UserRepositoryImpl
 
 import com.shubinat.notforgot.domain.entity.User
 import com.shubinat.notforgot.domain.usecases.users.RegisterUserUseCase
+import kotlinx.coroutines.*
 
 class RegistrationViewModel(application: Application) : AndroidViewModel(application) {
     val repository = UserRepositoryImpl(application)
@@ -37,6 +39,11 @@ class RegistrationViewModel(application: Application) : AndroidViewModel(applica
     val retryPasswordError: LiveData<Boolean>
         get() = _retryPasswordError
 
+    private val _loading = MutableLiveData<Boolean>()
+    val loading: LiveData<Boolean>
+        get() = _loading
+
+
     var successRegistrationListener: SuccessRegistrationListener? = null
 
 
@@ -57,12 +64,14 @@ class RegistrationViewModel(application: Application) : AndroidViewModel(applica
         if (retryPassword.get() != password.get()) {
             _retryPasswordError.value = true
         }
-        try {
-            if (userNameError.value == false &&
-                loginError.value == false &&
-                passwordError.value == false &&
-                retryPasswordError.value == false
-            ) {
+
+        if (userNameError.value == false &&
+            loginError.value == false &&
+            passwordError.value == false &&
+            retryPasswordError.value == false
+        ) {
+
+            val operation = viewModelScope.async(Dispatchers.IO) {
                 registerUserUseCase(
                     User(
                         0,
@@ -71,19 +80,51 @@ class RegistrationViewModel(application: Application) : AndroidViewModel(applica
                         password.get() ?: ""
                     )
                 )
-                successRegistrationListener?.successRegistration()
             }
+            viewModelScope.launch(Dispatchers.Main) {
 
-        }
-        catch (ex: RuntimeException) {
-            Toast.makeText(getApplication(),
-                "Пользователь с данным логином уже существует",
-                Toast.LENGTH_SHORT).show()
-        }
-        catch (ex: Exception) {
-            Toast.makeText(getApplication(),
-                "Ошибка регистрации",
-                Toast.LENGTH_SHORT).show()
+                delay(100)
+                if (operation.isActive) {
+                    try {
+                        _loading.value = true
+                        operation.await()
+                        successRegistrationListener?.successRegistration()
+                    } catch (ex: RuntimeException) {
+                        Toast.makeText(
+                            getApplication(),
+                            "Пользователь с данным логином уже существует",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    } catch (ex: Exception) {
+                        Toast.makeText(
+                            getApplication(),
+                            "Ошибка регистрации",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    } finally {
+                        _loading.value = false
+                    }
+                } else {
+                    try {
+                        operation.await()
+                        successRegistrationListener?.successRegistration()
+                    } catch (ex: RuntimeException) {
+                        Toast.makeText(
+                            getApplication(),
+                            "Пользователь с данным логином уже существует",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    } catch (ex: Exception) {
+                        Toast.makeText(
+                            getApplication(),
+                            "Ошибка регистрации",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                }
+
+
+            }
         }
 
     }

@@ -31,6 +31,7 @@
             tools:text="Добавить заметку" />
 
         <FrameLayout
+            android:id="@+id/frameLayout"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_marginTop="16dp"
@@ -109,18 +110,18 @@
                         app:layout_constraintEnd_toEndOf="@+id/til_description"
                         app:layout_constraintTop_toBottomOf="@+id/til_description"
                         tools:text="14/120" />
-                        <Spinner
-                            android:id="@+id/spinner_category"
-                            android:layout_width="0dp"
-                            android:layout_height="56dp"
-                            android:layout_marginEnd="16dp"
-                            app:layout_constraintEnd_toStartOf="@+id/button_add_category"
-                            app:layout_constraintStart_toStartOf="@+id/til_description"
-                            app:layout_constraintTop_toTopOf="@+id/button_add_category"
-                            android:background="@drawable/spinner_background"
-                            android:contentDescription="@string/editor_category_description"
-                            android:selectedItemPosition="@={viewModel.selectedCategoryPosition}"
-                            />
+
+                    <Spinner
+                        android:id="@+id/spinner_category"
+                        android:layout_width="0dp"
+                        android:layout_height="56dp"
+                        android:layout_marginEnd="16dp"
+                        android:background="@drawable/spinner_background"
+                        android:contentDescription="@string/editor_category_description"
+                        android:selectedItemPosition="@={viewModel.selectedCategoryPosition}"
+                        app:layout_constraintEnd_toStartOf="@+id/button_add_category"
+                        app:layout_constraintStart_toStartOf="@+id/til_description"
+                        app:layout_constraintTop_toTopOf="@+id/button_add_category" />
 
                     <Spinner
                         android:id="@+id/spinner_priority"
@@ -133,7 +134,7 @@
                         android:selectedItemPosition="@={viewModel.selectedPriorityPosition}"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="@+id/spinner_category"
-                        app:layout_constraintTop_toBottomOf="@+id/spinner_category"/>
+                        app:layout_constraintTop_toBottomOf="@+id/spinner_category" />
 
                     <com.google.android.material.floatingactionbutton.FloatingActionButton
                         android:id="@+id/button_add_category"
@@ -198,9 +199,36 @@
             android:layout_marginEnd="16dp"
             android:layout_marginBottom="16dp"
             android:text="@string/editor_button_save_text"
+            android:visibility="visible"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
+
+        <LinearLayout
+            android:id="@+id/layout_loading"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/frameLayout">
+
+            <TextView
+                android:id="@+id/tv_loading"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/editor_loading_text"
+                android:textSize="16sp" />
+
+            <ProgressBar
+                android:id="@+id/pb_loading"
+                style="?android:attr/progressBarStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp" />
+        </LinearLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

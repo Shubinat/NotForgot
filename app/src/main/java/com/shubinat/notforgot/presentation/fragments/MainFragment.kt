@@ -5,7 +5,6 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -37,9 +36,24 @@ class MainFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         binding.viewModel = viewModel
         setupAddClickListener()
+        setupLoadingDialog()
         setupRecycleView()
     }
 
+    private fun setupLoadingDialog() {
+        viewModel.loading.observe(viewLifecycleOwner) {
+            if (it) {
+                val dialog = LoadingDialogFragment.newInstance(getString(R.string.message_sync))
+                dialog.show(parentFragmentManager, LoadingDialogFragment.TAG)
+            } else {
+                val fragment = parentFragmentManager.findFragmentByTag(LoadingDialogFragment.TAG)
+                if (fragment != null) {
+                    val dialog = fragment as LoadingDialogFragment
+                    dialog.dismiss()
+                }
+            }
+        }
+    }
 
     private fun setupAddClickListener() {
         binding.buttonAdd.setOnClickListener {
@@ -54,10 +68,14 @@ class MainFragment : Fragment() {
 
     private fun setupRecycleView() {
         viewModel.getAllNotes(args.authUser)
-        val adapter = NotesAdapter(viewModel.notes)
-        setupCheckBoxClick(adapter)
-        setupItemLongClick(adapter)
-        binding.recyclerViewNotes.adapter = adapter
+        viewModel.notes.observe(viewLifecycleOwner) {
+            binding.tvEmptyList.visibility = if (it.isNotEmpty()) View.GONE else View.VISIBLE
+            val adapter = NotesAdapter(it)
+            setupCheckBoxClick(adapter)
+            setupItemLongClick(adapter)
+            binding.recyclerViewNotes.adapter = adapter
+        }
+
     }
 
     private fun setupCheckBoxClick(adapter: NotesAdapter) {
@@ -68,7 +86,11 @@ class MainFragment : Fragment() {
 
     private fun setupItemLongClick(adapter: NotesAdapter) {
         adapter.onItemLongClickListener = {
-            findNavController().navigate(MainFragmentDirections.actionMainFragmentToNoteDetailsFragment(it.id))
+            findNavController().navigate(
+                MainFragmentDirections.actionMainFragmentToNoteDetailsFragment(
+                    it.id
+                )
+            )
         }
     }
 
