@@ -47,7 +47,7 @@ class RegistrationFragment : Fragment(), RegistrationViewModel.SuccessRegistrati
             if (it) {
                 val dialog = LoadingDialogFragment.newInstance(getString(R.string.message_register))
                 dialog.show(parentFragmentManager, LoadingDialogFragment.TAG)
-            } else{
+            } else {
                 val prev = parentFragmentManager.findFragmentByTag(LoadingDialogFragment.TAG)
                 if (prev != null) {
                     val dialog = prev as LoadingDialogFragment
@@ -56,19 +56,24 @@ class RegistrationFragment : Fragment(), RegistrationViewModel.SuccessRegistrati
             }
         }
     }
+
     private fun observeViewModel() {
         viewModel.userNameError.observe(viewLifecycleOwner) {
-            binding.tilName.error = if (it) "Поле не может быть пустым" else null
+            binding.tilName.error =
+                if (it) getString(R.string.registration_text_input_error) else null
         }
         viewModel.loginError.observe(viewLifecycleOwner) {
-            binding.tilEmail.error = if (it) "Поле не может быть пустым" else null
+            binding.tilEmail.error =
+                if (it) getString(R.string.registration_text_input_error) else null
         }
         viewModel.passwordError.observe(viewLifecycleOwner) {
-            binding.tilPassword.error = if (it) "Поле не может быть пустым" else null
+            binding.tilPassword.error =
+                if (it) getString(R.string.registration_text_input_error) else null
         }
 
         viewModel.retryPasswordError.observe(viewLifecycleOwner) {
-            binding.tilRetryPassword.error = if (it) "Пароли не совпадают" else null
+            binding.tilRetryPassword.error =
+                if (it) getString(R.string.registration_password_error) else null
         }
     }
 

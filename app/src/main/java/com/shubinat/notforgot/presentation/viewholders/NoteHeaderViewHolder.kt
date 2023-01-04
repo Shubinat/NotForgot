@@ -1,5 +1,6 @@
 package com.shubinat.notforgot.presentation.viewholders
 
+import com.shubinat.notforgot.R
 import com.shubinat.notforgot.databinding.ItemNoteHeaderBinding
 import com.shubinat.notforgot.domain.entity.Category
 import com.shubinat.notforgot.presentation.listitems.CategoryItem
@@ -10,7 +11,12 @@ class NoteHeaderViewHolder(private val binding: ItemNoteHeaderBinding) :
 
     override fun bind(data: NoteListItem) {
         if (data is CategoryItem) {
-            binding.textViewHeader.text = data.category?.name ?: "Без категории"
+            if (data.category != null){
+                binding.textViewHeader.setText(data.category.name)
+            } else{
+                binding.textViewHeader.setText(R.string.null_category_name)
+            }
+
         } else {
             throw RuntimeException("data is not CategoryItem")
         }

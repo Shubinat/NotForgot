@@ -7,6 +7,7 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.shubinat.notforgot.R
 import com.shubinat.notforgot.data.room.repository.UserRepositoryImpl
 
 import com.shubinat.notforgot.domain.entity.User
@@ -92,13 +93,13 @@ class RegistrationViewModel(application: Application) : AndroidViewModel(applica
                     } catch (ex: RuntimeException) {
                         Toast.makeText(
                             getApplication(),
-                            "Пользователь с данным логином уже существует",
+                            getApplication<Application>().getString(R.string.register_invalid),
                             Toast.LENGTH_SHORT
                         ).show()
                     } catch (ex: Exception) {
                         Toast.makeText(
                             getApplication(),
-                            "Ошибка регистрации",
+                            getApplication<Application>().getString(R.string.register_error),
                             Toast.LENGTH_SHORT
                         ).show()
                     } finally {
@@ -111,13 +112,13 @@ class RegistrationViewModel(application: Application) : AndroidViewModel(applica
                     } catch (ex: RuntimeException) {
                         Toast.makeText(
                             getApplication(),
-                            "Пользователь с данным логином уже существует",
+                            getApplication<Application>().getString(R.string.register_invalid),
                             Toast.LENGTH_SHORT
                         ).show()
                     } catch (ex: Exception) {
                         Toast.makeText(
                             getApplication(),
-                            "Ошибка регистрации",
+                            getApplication<Application>().getString(R.string.register_error),
                             Toast.LENGTH_SHORT
                         ).show()
                     }
