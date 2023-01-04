@@ -43,6 +43,7 @@
     <string name="details_button_edit">Редактировать</string>
     <!-- Loading Dialog Messages -->
     <string name="message_auth">Авторизация…</string>
+    <string name="message_sync">Синхронизация данных…</string>
     <string name="message_register">Регистрация…</string>
 
     <!-- Toast Messages -->
