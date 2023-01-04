@@ -54,11 +54,24 @@ class NoteEditorFragment : Fragment(), EditorViewModel.SelectDateListener,
         viewModel.selectDateListener = this
         viewModel.addCategoryListener = this
 
+        setupLoadingMessages()
         setupCategoriesSpinner()
         setupPrioritiesSpinner()
         setupSaveClickListener()
         bindErrorMessages()
         setupTextChangedListeners()
+    }
+
+    private fun setupLoadingMessages() {
+        viewModel.loading.observe(viewLifecycleOwner) {
+            val loadingVisibility = if (it) View.VISIBLE else View.GONE
+            val buttonSaveVisibility = if (it) View.INVISIBLE else View.VISIBLE
+            binding.layoutLoading.visibility = loadingVisibility
+            binding.buttonSave.visibility = buttonSaveVisibility
+            if (it == false) {
+                findNavController().popBackStack()
+            }
+        }
     }
 
 
@@ -132,9 +145,7 @@ class NoteEditorFragment : Fragment(), EditorViewModel.SelectDateListener,
 
     private fun setupSaveClickListener() {
         binding.buttonSave.setOnClickListener {
-            if (viewModel.save()) {
-                findNavController().popBackStack()
-            }
+            viewModel.save()
         }
     }
 

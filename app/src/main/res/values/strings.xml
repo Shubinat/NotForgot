@@ -58,7 +58,7 @@
     <string name="priority_important">Высокий</string>
     <string name="priority_very_important">Очень высокий</string>
     <string name="date_format">%04d-%02d-%02d</string>
-
+    <string name="editor_loading_text">Сохранение</string>
 
 
 </resources>

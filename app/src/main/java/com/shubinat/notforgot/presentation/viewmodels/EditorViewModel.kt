@@ -5,6 +5,7 @@ import androidx.databinding.ObservableField
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
 import com.shubinat.notforgot.data.room.repository.CategoryRepositoryImpl
 import com.shubinat.notforgot.data.room.repository.NoteRepositoryImpl
 import com.shubinat.notforgot.domain.entity.Category
@@ -14,6 +15,7 @@ import com.shubinat.notforgot.domain.entity.User
 import com.shubinat.notforgot.domain.usecases.categories.GetAllCategoriesUseCase
 import com.shubinat.notforgot.domain.usecases.notes.AddNoteUseCase
 import com.shubinat.notforgot.domain.usecases.notes.EditNoteUseCase
+import kotlinx.coroutines.launch
 import java.time.LocalDate
 
 
@@ -93,6 +95,10 @@ class EditorViewModel(
                 resetPriorityError()
             }
         }
+
+    private var _loading = MutableLiveData<Boolean>()
+    val loading: LiveData<Boolean>
+        get() = _loading
 
 
     private fun validateFields() {
@@ -176,30 +182,37 @@ class EditorViewModel(
 
             val priorities = Priority.values()
             val priority = priorities[selectedPriorityPosition]
-            if (editMode) {
-                editNoteUseCase(
-                    note!!.copy(
-                        title = name.get().toString(),
-                        description = description.get().toString(),
-                        completionDate = LocalDate.parse(date.get().toString()),
-                        category = category,
-                        priority = priority,
-                    )
-                )
-            } else {
-                addNoteUseCase(
-                    Note(
-                        0,
-                        name.get().toString(),
-                        description.get().toString(),
-                        LocalDate.now(),
-                        LocalDate.parse(date.get().toString()),
-                        false,
-                        category,
-                        priority,
-                        authUser
-                    )
-                )
+            viewModelScope.launch {
+                _loading.value = true
+                try {
+                    if (editMode) {
+                        editNoteUseCase(
+                            note!!.copy(
+                                title = name.get().toString(),
+                                description = description.get().toString(),
+                                completionDate = LocalDate.parse(date.get().toString()),
+                                category = category,
+                                priority = priority,
+                            )
+                        )
+                    } else {
+                        addNoteUseCase(
+                            Note(
+                                0,
+                                name.get().toString(),
+                                description.get().toString(),
+                                LocalDate.now(),
+                                LocalDate.parse(date.get().toString()),
+                                false,
+                                category,
+                                priority,
+                                authUser
+                            )
+                        )
+                    }
+                } finally {
+                    _loading.value = false
+                }
             }
             return true
         }
