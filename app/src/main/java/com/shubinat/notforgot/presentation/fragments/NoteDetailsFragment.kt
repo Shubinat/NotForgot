@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import com.shubinat.notforgot.R
 import com.shubinat.notforgot.databinding.FragmentNoteDetailsBinding
 import com.shubinat.notforgot.domain.entity.Note
 import com.shubinat.notforgot.presentation.viewmodelfactories.DetailsViewModelFactory
@@ -39,18 +40,51 @@ class NoteDetailsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        observeNote()
+        setupLoadingScreen()
+        setupEditButtonListener()
         viewModel.load()
         binding.viewModel = viewModel
-        setupEditButtonListener()
+
+    }
+
+    private fun setupLoadingScreen() {
+        viewModel.loading.observe(viewLifecycleOwner) {
+            val mainVisibility = if (it) View.GONE else View.VISIBLE
+            val loadingVisibility = if (it) View.VISIBLE else View.GONE
+            binding.layoutMain.visibility = mainVisibility
+            binding.layoutLoading.visibility = loadingVisibility
+        }
+    }
+
+    private fun observeNote() {
+        viewModel.note.observe(viewLifecycleOwner) {
+            with(binding) {
+                tvTitle.text = it.title
+                tvDescription.text = it.description
+                tvCreationDate.text = it.creationDate.toString()
+                tvCompletionDate.text = it.completionDate.toString()
+                tvCompleted.text =
+                    if (it.completed) getString(R.string.details_completed)
+                    else getString(R.string.details_not_completed)
+                val colorId =
+                    if (it.completed) android.R.color.holo_green_light
+                    else android.R.color.holo_red_light
+                tvCompleted.setTextColor(resources.getColor(colorId))
+            }
+        }
     }
 
 
     private fun setupEditButtonListener() {
         binding.buttonEdit.setOnClickListener {
-            val note = viewModel.note.get() as Note
-            findNavController().navigate(NoteDetailsFragmentDirections.actionNoteDetailsFragmentToNoteEditorFragment(
-                note.user,
-                note))
+            val note = viewModel.note.value as Note
+            findNavController().navigate(
+                NoteDetailsFragmentDirections.actionNoteDetailsFragmentToNoteEditorFragment(
+                    note.user,
+                    note
+                )
+            )
         }
     }
 
