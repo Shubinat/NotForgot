@@ -22,7 +22,6 @@ class NotesAdapter(private val list : List<NoteListItem>) : RecyclerView.Adapter
     var onItemCheckBoxClickListener: ((Note) -> Unit)? = null
     var onItemLongClickListener: ((Note) -> Unit)? = null
 
-
     override fun getItemViewType(position: Int): Int {
         return list[position].getType()
     }
