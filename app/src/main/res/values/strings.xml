@@ -15,6 +15,7 @@
     <string name="registration_retry_password_hint">Повторите пароль</string>
     <string name="registration_button_reg_text">Регистрация</string>
     <string name="registration_text_input_error">Поле не может быть пустым</string>
+    <string name="registration_password_error">Пароли не совпадают</string>
     <!-- Main Fragment -->
     <string name="main_btn_add_description">Добавить новую заметку</string>
     <string name="main_empty_list_text">У вас пока нет дел.\nСчастливый вы человек!</string>
@@ -31,6 +32,7 @@
     <string name="editor_description_error">Поле обязательно для заполения</string>
     <string name="editor_date_error">Выберите дату</string>
     <string name="editor_priority_error">Выберите приоритет</string>
+    <string name="editor_loading_text">Сохранение</string>
     <!-- Add Category Dialog Fragment -->
     <string name="add_category_title">Добавить категорию</string>
     <string name="add_category_name_hint">Название категории</string>
@@ -45,11 +47,11 @@
     <string name="message_auth">Авторизация…</string>
     <string name="message_sync">Синхронизация данных…</string>
     <string name="message_register">Регистрация…</string>
-
     <!-- Toast Messages -->
     <string name="auth_invalid">Неверный логин или пароль</string>
     <string name="auth_error">Произошла ошибка авторизации. Повторите попытку позже.</string>
-
+    <string name="register_invalid">Пользователь с данным логином уже существует</string>
+    <string name="register_error">Ошибка регистрации</string>
     <!--Other-->
     <string name="null_category_name">Без категории</string>
     <string name="priority_empty">Без приоритета</string>
@@ -58,7 +60,7 @@
     <string name="priority_important">Высокий</string>
     <string name="priority_very_important">Очень высокий</string>
     <string name="date_format">%04d-%02d-%02d</string>
-    <string name="editor_loading_text">Сохранение</string>
+
 
 
 </resources>
