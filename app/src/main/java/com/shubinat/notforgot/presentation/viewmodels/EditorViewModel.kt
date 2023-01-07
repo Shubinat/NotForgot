@@ -16,6 +16,7 @@ import com.shubinat.notforgot.domain.usecases.categories.GetAllCategoriesUseCase
 import com.shubinat.notforgot.domain.usecases.notes.AddNoteUseCase
 import com.shubinat.notforgot.domain.usecases.notes.EditNoteUseCase
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import java.time.LocalDate
 
 
@@ -141,7 +142,7 @@ class EditorViewModel(
 
     fun loadCategoriesNames() {
         val categoriesList = mutableListOf<Category>()
-        categoriesList.addAll(getAllCategoriesUseCase(authUser))
+        categoriesList.addAll(runBlocking { getAllCategoriesUseCase(authUser)})
         categoriesList.add(0, Category.getNullCategory(app, authUser))
         _categories.value = categoriesList.map { it.name }.toList()
     }
@@ -174,7 +175,9 @@ class EditorViewModel(
             _dateError.value == false &&
             _priorityError.value == false
         ) {
-            val categories = getAllCategoriesUseCase(authUser)
+            val categories = runBlocking {
+                getAllCategoriesUseCase(authUser)
+            }
             val category =
                 if (selectedCategoryPosition != 0)
                     categories[selectedCategoryPosition - 1]

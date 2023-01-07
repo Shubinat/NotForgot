@@ -7,6 +7,7 @@ import com.shubinat.notforgot.data.room.repository.CategoryRepositoryImpl
 import com.shubinat.notforgot.domain.entity.Category
 import com.shubinat.notforgot.domain.entity.User
 import com.shubinat.notforgot.domain.usecases.categories.AddCategoryUseCase
+import kotlinx.coroutines.runBlocking
 
 class AddCategoryViewModel(private val authUser: User, application: Application) :
     AndroidViewModel(application) {
@@ -17,7 +18,9 @@ class AddCategoryViewModel(private val authUser: User, application: Application)
 
     fun save(): Boolean {
         return try {
-            addCategoryUseCase(Category(0, name.get() ?: "", authUser))
+            runBlocking {
+                addCategoryUseCase(Category(0, name.get() ?: "", authUser))
+            }
             true
         } catch (ex: Exception) {
             false
