@@ -5,17 +5,12 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.shubinat.notforgot.databinding.ItemNoteBinding
 import com.shubinat.notforgot.databinding.ItemNoteHeaderBinding
-import com.shubinat.notforgot.domain.entity.Category
 import com.shubinat.notforgot.domain.entity.Note
-import com.shubinat.notforgot.domain.entity.Priority
-import com.shubinat.notforgot.domain.entity.User
-import com.shubinat.notforgot.presentation.listitems.CategoryItem
 import com.shubinat.notforgot.presentation.listitems.NoteItem
 import com.shubinat.notforgot.presentation.listitems.NoteListItem
 import com.shubinat.notforgot.presentation.viewholders.BaseNoteViewHolder
 import com.shubinat.notforgot.presentation.viewholders.NoteHeaderViewHolder
 import com.shubinat.notforgot.presentation.viewholders.NoteViewHolder
-import java.util.Date
 
 class NotesAdapter(private val list : List<NoteListItem>) : RecyclerView.Adapter<BaseNoteViewHolder>() {
 
