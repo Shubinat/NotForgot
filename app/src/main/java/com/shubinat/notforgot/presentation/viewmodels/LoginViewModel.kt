@@ -8,6 +8,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.shubinat.notforgot.R
+import com.shubinat.notforgot.data.roomWithRetrofit.exceptions.BadRequestException
 import com.shubinat.notforgot.data.roomWithRetrofit.repository.UserRepositoryImpl
 import com.shubinat.notforgot.domain.entity.LoginUser
 import com.shubinat.notforgot.domain.entity.User
@@ -63,7 +64,8 @@ class LoginViewModel(application: Application) : AndroidViewModel(application) {
 
                         val user = operation.await()
                         onLogin(user)
-
+                    } catch (ex: BadRequestException) {
+                        onLogin(null)
                     } catch (ex: Exception) {
                         Toast.makeText(
                             getApplication(),
@@ -77,6 +79,8 @@ class LoginViewModel(application: Application) : AndroidViewModel(application) {
                     try {
                         val user = operation.await()
                         onLogin(user)
+                    } catch (ex: BadRequestException) {
+                        onLogin(null)
                     } catch (ex: Exception) {
                         Toast.makeText(
                             getApplication(),

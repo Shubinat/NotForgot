@@ -8,6 +8,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.shubinat.notforgot.R
+import com.shubinat.notforgot.data.roomWithRetrofit.exceptions.BadRequestException
 import com.shubinat.notforgot.data.roomWithRetrofit.repository.UserRepositoryImpl
 import com.shubinat.notforgot.domain.entity.User
 import com.shubinat.notforgot.domain.usecases.users.RegisterUserUseCase
@@ -89,7 +90,7 @@ class RegistrationViewModel(application: Application) : AndroidViewModel(applica
                         _loading.value = true
                         operation.await()
                         successRegistrationListener?.successRegistration()
-                    } catch (ex: RuntimeException) {
+                    } catch (ex: BadRequestException) {
                         Toast.makeText(
                             getApplication(),
                             getApplication<Application>().getString(R.string.register_invalid),
@@ -108,7 +109,7 @@ class RegistrationViewModel(application: Application) : AndroidViewModel(applica
                     try {
                         operation.await()
                         successRegistrationListener?.successRegistration()
-                    } catch (ex: RuntimeException) {
+                    } catch (ex: BadRequestException) {
                         Toast.makeText(
                             getApplication(),
                             getApplication<Application>().getString(R.string.register_invalid),
