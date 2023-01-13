@@ -11,7 +11,7 @@ object NoteRepositoryImpl : NoteRepository {
     private var idCounter = 0
 
 
-    override fun addNote(note: Note) {
+    override suspend fun addNote(note: Note) {
         if (note.title.isBlank()) throw RuntimeException("Title cannot be blank")
         if (note.description.isBlank()) throw RuntimeException("Description cannot be blank")
 
@@ -26,7 +26,7 @@ object NoteRepositoryImpl : NoteRepository {
 
     }
 
-    override fun editNote(note: Note) {
+    override suspend fun editNote(note: Note) {
         if (note.title.isBlank()) throw RuntimeException("Title cannot be blank")
         if (note.description.isBlank()) throw RuntimeException("Description cannot be blank")
 
@@ -36,11 +36,11 @@ object NoteRepositoryImpl : NoteRepository {
         notes.add(note.copy(id = existNote.id))
     }
 
-    override fun getNotes(user: User): List<Note> {
+    override suspend fun getNotes(user: User): List<Note> {
         return notes.filter { it.user == user }.toList()
     }
 
-    override fun getNote(id: Int): Note {
+    override suspend fun getNote(id: Int): Note {
         return notes.firstOrNull { it.id == id }
             ?: throw RuntimeException("Note not found")
     }

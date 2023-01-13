@@ -8,7 +8,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.shubinat.notforgot.R
-import com.shubinat.notforgot.data.room.repository.UserRepositoryImpl
+import com.shubinat.notforgot.data.roomWithRetrofit.repository.UserRepositoryImpl
 import com.shubinat.notforgot.domain.entity.LoginUser
 import com.shubinat.notforgot.domain.entity.User
 import com.shubinat.notforgot.domain.usecases.users.AuthorizeUserUseCase
@@ -74,8 +74,16 @@ class LoginViewModel(application: Application) : AndroidViewModel(application) {
                         _loading.value = false
                     }
                 } else {
-                    val user = operation.await()
-                    onLogin(user)
+                    try {
+                        val user = operation.await()
+                        onLogin(user)
+                    } catch (ex: Exception) {
+                        Toast.makeText(
+                            getApplication(),
+                            getApplication<Application>().getString(R.string.auth_error),
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
                 }
             }
 
@@ -90,8 +98,7 @@ class LoginViewModel(application: Application) : AndroidViewModel(application) {
                 getApplication(),
                 getApplication<Application>().getString(R.string.auth_invalid),
                 Toast.LENGTH_SHORT
-            )
-                .show()
+            ).show()
         }
     }
 

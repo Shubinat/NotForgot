@@ -11,7 +11,7 @@ class CategoryRepositoryImpl(application: Application) : CategoryRepository {
     private val db = AppDatabase.getInstance(application.applicationContext)
     private val userRepository = UserRepositoryImpl(application)
 
-    override fun addCategory(category: Category) {
+    override suspend fun addCategory(category: Category) {
         if (category.name.isBlank()) throw RuntimeException("Name cannot be blank")
         if (getCategories(category.user).firstOrNull { it.name == category.name } != null)
             throw RuntimeException("Category with name: ${category.name} is exist")
@@ -25,13 +25,13 @@ class CategoryRepositoryImpl(application: Application) : CategoryRepository {
         )
     }
 
-    override fun getCategories(user: User): List<Category> {
+    override suspend fun getCategories(user: User): List<Category> {
         return db.categoryDao().getAll(user.id).map {
             Category(it.id, it.name, user)
         }
     }
 
-    override fun getCategory(id: Int): Category {
+    override suspend fun getCategory(id: Int): Category {
         val category =
             db.categoryDao().getCategory(id) ?: throw RuntimeException("Category not found")
         val user = userRepository.getUser(category.userId)

@@ -8,8 +8,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.shubinat.notforgot.R
-import com.shubinat.notforgot.data.room.repository.UserRepositoryImpl
-
+import com.shubinat.notforgot.data.roomWithRetrofit.repository.UserRepositoryImpl
 import com.shubinat.notforgot.domain.entity.User
 import com.shubinat.notforgot.domain.usecases.users.RegisterUserUseCase
 import kotlinx.coroutines.*
