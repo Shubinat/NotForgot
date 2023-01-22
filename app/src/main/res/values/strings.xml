@@ -47,6 +47,8 @@
     <string name="message_auth">Авторизация…</string>
     <string name="message_sync">Синхронизация данных…</string>
     <string name="message_register">Регистрация…</string>
+    <!-- Notifications -->
+    <string name="notification_sync">Синхронизация данных…</string>
     <!-- Toast Messages -->
     <string name="auth_invalid">Неверный логин или пароль</string>
     <string name="auth_error">Произошла ошибка авторизации. Повторите попытку позже.</string>

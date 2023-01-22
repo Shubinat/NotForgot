@@ -15,7 +15,7 @@ class NoteRepositoryImpl(application: Application) : NoteRepository {
     private val categoryRepository = CategoryRepositoryImpl(application)
     private val userRepository = UserRepositoryImpl(application)
 
-    override fun addNote(note: Note) {
+    override suspend fun addNote(note: Note) {
         if (note.title.isBlank()) throw RuntimeException("Title cannot be blank")
         if (note.description.isBlank()) throw RuntimeException("Description cannot be blank")
 
@@ -34,7 +34,7 @@ class NoteRepositoryImpl(application: Application) : NoteRepository {
         )
     }
 
-    override fun editNote(note: Note) {
+    override suspend fun editNote(note: Note) {
         if (note.title.isBlank()) throw RuntimeException("Title cannot be blank")
         if (note.description.isBlank()) throw RuntimeException("Description cannot be blank")
 
@@ -56,7 +56,7 @@ class NoteRepositoryImpl(application: Application) : NoteRepository {
         )
     }
 
-    override fun getNotes(user: User): List<Note> {
+    override suspend fun getNotes(user: User): List<Note> {
         return db.noteDao().getAll(user.id).map {
             val category =
                 if (it.categoryId != null) categoryRepository.getCategory(it.categoryId) else null
@@ -75,7 +75,7 @@ class NoteRepositoryImpl(application: Application) : NoteRepository {
     }
 
 
-    override fun getNote(id: Int): Note {
+    override suspend fun getNote(id: Int): Note {
         val note = db.noteDao().getNote(id) ?: throw RuntimeException("Note not found")
         val category =
             if (note.categoryId != null) categoryRepository.getCategory(note.categoryId) else null

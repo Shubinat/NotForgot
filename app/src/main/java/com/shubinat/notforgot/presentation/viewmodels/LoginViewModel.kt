@@ -8,7 +8,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.shubinat.notforgot.R
-import com.shubinat.notforgot.data.room.repository.UserRepositoryImpl
+import com.shubinat.notforgot.data.roomWithRetrofit.exceptions.BadRequestException
+import com.shubinat.notforgot.data.roomWithRetrofit.repository.UserRepositoryImpl
 import com.shubinat.notforgot.domain.entity.LoginUser
 import com.shubinat.notforgot.domain.entity.User
 import com.shubinat.notforgot.domain.usecases.users.AuthorizeUserUseCase
@@ -16,7 +17,7 @@ import kotlinx.coroutines.*
 
 class LoginViewModel(application: Application) : AndroidViewModel(application) {
 
-    val repository = UserRepositoryImpl(application)
+    val repository = UserRepositoryImpl.getInstance(application)
 
     val authorizeUserUseCase = AuthorizeUserUseCase(repository)
 
@@ -34,6 +35,7 @@ class LoginViewModel(application: Application) : AndroidViewModel(application) {
     private val _loading = MutableLiveData<Boolean>()
     val loading: LiveData<Boolean>
         get() = _loading
+
 
     var successAuthorizationListener: SuccessAuthorizationListener? = null
 
@@ -63,7 +65,8 @@ class LoginViewModel(application: Application) : AndroidViewModel(application) {
 
                         val user = operation.await()
                         onLogin(user)
-
+                    } catch (ex: BadRequestException) {
+                        onLogin(null)
                     } catch (ex: Exception) {
                         Toast.makeText(
                             getApplication(),
@@ -74,8 +77,18 @@ class LoginViewModel(application: Application) : AndroidViewModel(application) {
                         _loading.value = false
                     }
                 } else {
-                    val user = operation.await()
-                    onLogin(user)
+                    try {
+                        val user = operation.await()
+                        onLogin(user)
+                    } catch (ex: BadRequestException) {
+                        onLogin(null)
+                    } catch (ex: Exception) {
+                        Toast.makeText(
+                            getApplication(),
+                            getApplication<Application>().getString(R.string.auth_error),
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
                 }
             }
 
@@ -90,8 +103,7 @@ class LoginViewModel(application: Application) : AndroidViewModel(application) {
                 getApplication(),
                 getApplication<Application>().getString(R.string.auth_invalid),
                 Toast.LENGTH_SHORT
-            )
-                .show()
+            ).show()
         }
     }
 

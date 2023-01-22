@@ -10,13 +10,15 @@ import com.shubinat.notforgot.domain.repository.UserRepository
 
 
 class UserRepositoryImpl(application: Application) : UserRepository {
+
     private val db : AppDatabase = AppDatabase.getInstance(application.applicationContext)
-    override fun getUser(id: Int) : User {
+    override suspend fun getUser(id: Int) : User {
         val user = db.userDao().findUser(id) ?: throw RuntimeException("User not found")
         return User(user.id, user.name, user.login, user.password)
     }
 
-    override fun authorizeUser(authData: LoginUser): User? {
+
+    override suspend fun authorizeUser(authData: LoginUser): User? {
         val dbUser = db.userDao().findUser(authData.login, authData.password) ?: return null
         return User(
             dbUser.id,
@@ -26,7 +28,7 @@ class UserRepositoryImpl(application: Application) : UserRepository {
         )
     }
 
-    override fun registerUser(user: User) {
+    override suspend fun registerUser(user: User) {
         if (user.name.isBlank()) throw RuntimeException("Name cannot be blank")
         if (user.login.isBlank()) throw RuntimeException("Login cannot be blank")
         if (user.password.isBlank()) throw RuntimeException("Password cannot be blank")

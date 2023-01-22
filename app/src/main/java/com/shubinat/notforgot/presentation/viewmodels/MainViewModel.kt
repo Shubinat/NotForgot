@@ -1,34 +1,24 @@
 package com.shubinat.notforgot.presentation.viewmodels
 
 import android.app.Application
-import android.app.LauncherActivity.ListItem
-import android.opengl.Visibility
-import android.view.View
-import android.widget.TextView
-import androidx.databinding.BindingAdapter
-import androidx.databinding.ObservableField
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.shubinat.notforgot.data.room.repository.NoteRepositoryImpl
+import com.shubinat.notforgot.data.roomWithRetrofit.repository.NoteRepositoryImpl
 import com.shubinat.notforgot.domain.entity.Note
 import com.shubinat.notforgot.domain.entity.User
 import com.shubinat.notforgot.domain.usecases.notes.EditNoteUseCase
 import com.shubinat.notforgot.domain.usecases.notes.GetAllNotesUseCase
-import com.shubinat.notforgot.presentation.adapters.NotesAdapter
 import com.shubinat.notforgot.presentation.listitems.CategoryItem
 import com.shubinat.notforgot.presentation.listitems.NoteItem
 import com.shubinat.notforgot.presentation.listitems.NoteListItem
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 
 class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     private val repository =
-        NoteRepositoryImpl(application)
+        NoteRepositoryImpl.getInstance(application)
 
     private val getAllNotesUseCase = GetAllNotesUseCase(repository)
     private val editNoteUseCase = EditNoteUseCase(repository)

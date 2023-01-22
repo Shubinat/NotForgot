@@ -17,18 +17,18 @@ object UserRepositoryImpl : UserRepository {
     )
 
     private var idCounter = 7
-    override fun getUser(id: Int): User {
+    override suspend fun getUser(id: Int): User {
         TODO("Not yet implemented")
     }
 
-    override fun authorizeUser(authData: LoginUser): User? {
+    override suspend fun authorizeUser(authData: LoginUser): User? {
         return users.firstOrNull {
             it.login == authData.login && it.password == authData.password
         }
 
     }
 
-    override fun registerUser(user: User) {
+    override suspend fun registerUser(user: User) {
         if (user.name.isBlank()) throw RuntimeException("Name cannot be blank")
         if (user.login.isBlank()) throw RuntimeException("Login cannot be blank")
         if (user.password.isBlank()) throw RuntimeException("Password cannot be blank")

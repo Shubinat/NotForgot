@@ -11,7 +11,7 @@ object CategoryRepositoryImpl : CategoryRepository {
 
     private var idCounter = 0
 
-    override fun addCategory(category: Category) {
+    override suspend fun addCategory(category: Category) {
         if (category.name.isBlank()) throw RuntimeException("Name cannot be blank")
         if (categories.firstOrNull { it.name == category.name } != null)
             throw RuntimeException("Category with name: ${category.name} is exist")
@@ -26,11 +26,11 @@ object CategoryRepositoryImpl : CategoryRepository {
         categories.add(category)
     }
 
-    override fun getCategories(user: User): List<Category> {
+    override suspend fun getCategories(user: User): List<Category> {
         return categories.filter { it.user == user }.toList()
     }
 
-    override fun getCategory(id: Int): Category {
+    override suspend fun getCategory(id: Int): Category {
         TODO("Not yet implemented")
     }
 }

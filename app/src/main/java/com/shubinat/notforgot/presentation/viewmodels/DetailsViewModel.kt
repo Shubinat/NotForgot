@@ -3,13 +3,12 @@ package com.shubinat.notforgot.presentation.viewmodels
 import android.app.Application
 import android.graphics.drawable.Drawable
 import androidx.databinding.ObservableField
-import androidx.databinding.ObservableParcelable
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.shubinat.notforgot.R
-import com.shubinat.notforgot.data.room.repository.NoteRepositoryImpl
+import com.shubinat.notforgot.data.roomWithRetrofit.repository.NoteRepositoryImpl
 import com.shubinat.notforgot.domain.entity.Note
 import com.shubinat.notforgot.domain.entity.Priority
 import com.shubinat.notforgot.domain.usecases.notes.GetNoteUseCase
@@ -21,7 +20,7 @@ import kotlinx.coroutines.launch
 class DetailsViewModel(private val noteId: Int, private val app: Application) :
     AndroidViewModel(app) {
 
-    private val repository = NoteRepositoryImpl(app)
+    private val repository = NoteRepositoryImpl.getInstance(app)
     private val getNoteUseCase = GetNoteUseCase(repository)
 
     val categoryName = ObservableField<String>()

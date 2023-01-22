@@ -2,12 +2,13 @@ package com.shubinat.notforgot.presentation.viewmodels
 
 import android.app.Application
 import androidx.databinding.ObservableField
+import androidx.databinding.ObservableInt
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.shubinat.notforgot.data.room.repository.CategoryRepositoryImpl
-import com.shubinat.notforgot.data.room.repository.NoteRepositoryImpl
+import com.shubinat.notforgot.data.roomWithRetrofit.repository.CategoryRepositoryImpl
+import com.shubinat.notforgot.data.roomWithRetrofit.repository.NoteRepositoryImpl
 import com.shubinat.notforgot.domain.entity.Category
 import com.shubinat.notforgot.domain.entity.Note
 import com.shubinat.notforgot.domain.entity.Priority
@@ -15,8 +16,7 @@ import com.shubinat.notforgot.domain.entity.User
 import com.shubinat.notforgot.domain.usecases.categories.GetAllCategoriesUseCase
 import com.shubinat.notforgot.domain.usecases.notes.AddNoteUseCase
 import com.shubinat.notforgot.domain.usecases.notes.EditNoteUseCase
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.*
 import java.time.LocalDate
 
 
@@ -27,8 +27,8 @@ class EditorViewModel(
 ) :
     AndroidViewModel(app) {
 
-    private val categoryRepository = CategoryRepositoryImpl(app)
-    private val noteRepository = NoteRepositoryImpl(app)
+    private val categoryRepository = CategoryRepositoryImpl.getInstance(app)
+    private val noteRepository = NoteRepositoryImpl.getInstance(app)
 
     private val getAllCategoriesUseCase = GetAllCategoriesUseCase(categoryRepository)
     private val addNoteUseCase = AddNoteUseCase(noteRepository)
@@ -77,13 +77,15 @@ class EditorViewModel(
     val priorities: LiveData<List<String>>
         get() = _priorities
 
+
     init {
-        loadCategoriesNames()
+        viewModelScope.launch {
+            loadCategoriesNames()
+        }
         loadPrioritiesNames()
     }
 
-
-    var selectedCategoryPosition: Int = loadSelectedCategoryPosition()
+    val selectedCategoryPosition: ObservableInt = ObservableInt(DEFAULT_CATEGORY_SPINNER_POSITION)
 
     private var _selectedPriorityPosition = loadSelectedPriorityPosition()
     var selectedPriorityPosition: Int
@@ -116,33 +118,40 @@ class EditorViewModel(
 
     private fun loadSelectedPriorityPosition(): Int {
         if (editMode) {
+
             val currentPosition = priorities.value!!.indexOfFirst {
                 it == note!!.priority.getStringValue(app)
             }
+
             return currentPosition
         }
         return DEFAULT_PRIORITY_SPINNER_POSITION
     }
 
-    private fun loadSelectedCategoryPosition(): Int {
+    fun loadSelectedCategoryPosition() {
         if (editMode) {
             val currentPosition = categories.value!!.indexOfFirst {
                 it == note!!.category?.name
             }
             if (currentPosition == -1)
-                return DEFAULT_CATEGORY_SPINNER_POSITION
-            return currentPosition
+                selectedCategoryPosition.set(DEFAULT_CATEGORY_SPINNER_POSITION)
+            selectedCategoryPosition.set(currentPosition)
+        } else {
+            selectedCategoryPosition.set(DEFAULT_CATEGORY_SPINNER_POSITION)
         }
-        return DEFAULT_CATEGORY_SPINNER_POSITION
     }
 
     private fun resetPriorityError() {
         _priorityError.value = false
     }
 
-    fun loadCategoriesNames() {
+    suspend fun loadCategoriesNames() {
         val categoriesList = mutableListOf<Category>()
-        categoriesList.addAll(runBlocking { getAllCategoriesUseCase(authUser)})
+        categoriesList.addAll(withContext(viewModelScope.coroutineContext) {
+            getAllCategoriesUseCase(
+                authUser
+            )
+        })
         categoriesList.add(0, Category.getNullCategory(app, authUser))
         _categories.value = categoriesList.map { it.name }.toList()
     }
@@ -167,7 +176,7 @@ class EditorViewModel(
         addCategoryListener?.addCategory()
     }
 
-    fun save(): Boolean {
+    suspend fun save(): Boolean {
         validateFields()
 
         if (_nameError.value == false &&
@@ -175,12 +184,12 @@ class EditorViewModel(
             _dateError.value == false &&
             _priorityError.value == false
         ) {
-            val categories = runBlocking {
+            val categories = withContext(viewModelScope.coroutineContext) {
                 getAllCategoriesUseCase(authUser)
             }
             val category =
-                if (selectedCategoryPosition != 0)
-                    categories[selectedCategoryPosition - 1]
+                if (selectedCategoryPosition.get() != 0)
+                    categories[selectedCategoryPosition.get() - 1]
                 else null
 
             val priorities = Priority.values()
