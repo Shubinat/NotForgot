@@ -8,14 +8,18 @@ import androidx.room.PrimaryKey
 @Entity(
     foreignKeys = [
         ForeignKey(
-        entity = User::class,
-        parentColumns = ["id"],
-        childColumns = ["user_id"]
-    ),
+            entity = User::class,
+            parentColumns = ["id"],
+            childColumns = ["user_id"],
+            onDelete = ForeignKey.CASCADE,
+            onUpdate = ForeignKey.CASCADE
+        ),
         ForeignKey(
             entity = Category::class,
             parentColumns = ["id"],
-            childColumns = ["category_id"]
+            childColumns = ["category_id"],
+            onDelete = ForeignKey.CASCADE,
+            onUpdate = ForeignKey.CASCADE
         )]
 )
 class Note(

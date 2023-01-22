@@ -10,7 +10,8 @@ import androidx.room.PrimaryKey
         entity = User::class,
         parentColumns = ["id"],
         childColumns = ["user_id"],
-        onDelete = ForeignKey.CASCADE
+        onDelete = ForeignKey.CASCADE,
+        onUpdate = ForeignKey.CASCADE
     )]
 )
 class Category(

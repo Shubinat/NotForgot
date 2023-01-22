@@ -25,8 +25,8 @@ data class NoteModel(
     val completed: Boolean,
     @SerializedName("category_id")
     @Expose
-    val categoryId: Int,
+    val categoryId: Int?,
     @SerializedName("priority")
     @Expose
-    val priority: Priority
+    val priority: Int
 )

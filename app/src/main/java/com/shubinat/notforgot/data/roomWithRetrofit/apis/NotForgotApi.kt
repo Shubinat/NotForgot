@@ -1,6 +1,9 @@
 package com.shubinat.notforgot.data.roomWithRetrofit.apis
 
 import com.shubinat.notforgot.data.roomWithRetrofit.models.*
+import com.shubinat.notforgot.data.roomWithRetrofit.utils.convertToSuspend
+import kotlinx.coroutines.async
+import kotlinx.coroutines.coroutineScope
 import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.DELETE
@@ -18,10 +21,13 @@ interface NotForgotApi {
     fun registerUser(@Body data: RegisterRequest): Call<UserModel>
 
     @GET("categories")
-    fun getAllCategories(@Header("Authorization") token: String): List<CategoryModel>
+    fun getAllCategories(@Header("Authorization") token: String): Call<List<CategoryModel>>
 
     @POST("categories")
-    fun addCategory(@Header("Authorization") token: String, @Body category: CategoryModel): Call<CategoryModel>
+    fun addCategory(
+        @Header("Authorization") token: String,
+        @Body category: CategoryModel
+    ): Call<CategoryModel>
 
     @GET("notes")
     fun getAllNotes(@Header("Authorization") token: String): Call<List<NoteModel>>
@@ -33,8 +39,13 @@ interface NotForgotApi {
     fun addNote(@Header("Authorization") token: String, @Body category: NoteModel): Call<NoteModel>
 
     @PUT("notes/{id}")
-    fun putNote(@Header("Authorization") token: String, @Path("id") id: Int): Call<NoteModel>
+    fun putNote(
+        @Header("Authorization") token: String,
+        @Path("id") id: Int,
+        @Body data: NoteModel
+    ): Call<NoteModel>
 
     @DELETE("notes/{id}")
     fun deleteNote(@Header("Authorization") token: String, @Path("id") id: Int): Call<NoteModel>
+
 }

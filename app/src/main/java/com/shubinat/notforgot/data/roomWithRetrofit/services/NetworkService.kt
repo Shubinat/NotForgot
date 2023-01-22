@@ -30,7 +30,7 @@ class NetworkService private constructor() {
 
     companion object {
         private var INSTANCE: NetworkService? = null
-        private const val BASE_URL = "http://192.168.1.45/notforgot/api/"
+        private const val BASE_URL = "http://192.168.1.94:80/notforgot/api/"
         fun getInstance(): NetworkService {
             if (INSTANCE == null)
                 INSTANCE = NetworkService()
@@ -44,21 +44,12 @@ class NetworkService private constructor() {
 
     fun isOnline(context: Context): Boolean {
         val connectivityManager =
-            context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+            context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager?
         if (connectivityManager != null) {
             val capabilities =
                 connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork)
             if (capabilities != null) {
-                if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR)) {
-                    Log.i("Internet", "NetworkCapabilities.TRANSPORT_CELLULAR")
-                    return true
-                } else if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)) {
-                    Log.i("Internet", "NetworkCapabilities.TRANSPORT_WIFI")
-                    return true
-                } else if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET)) {
-                    Log.i("Internet", "NetworkCapabilities.TRANSPORT_ETHERNET")
-                    return true
-                }
+                return true
             }
         }
         return false

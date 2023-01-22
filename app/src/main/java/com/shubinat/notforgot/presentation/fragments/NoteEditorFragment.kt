@@ -14,12 +14,14 @@ import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.shubinat.notforgot.R
 import com.shubinat.notforgot.databinding.FragmentNoteEditorBinding
 import com.shubinat.notforgot.presentation.viewmodelfactories.EditorViewModelFactory
 import com.shubinat.notforgot.presentation.viewmodels.EditorViewModel
+import kotlinx.coroutines.launch
 import java.util.Calendar
 
 class NoteEditorFragment : Fragment(), EditorViewModel.SelectDateListener,
@@ -145,7 +147,9 @@ class NoteEditorFragment : Fragment(), EditorViewModel.SelectDateListener,
 
     private fun setupSaveClickListener() {
         binding.buttonSave.setOnClickListener {
-            viewModel.save()
+            lifecycleScope.launch {
+                viewModel.save()
+            }
         }
     }
 
@@ -157,7 +161,9 @@ class NoteEditorFragment : Fragment(), EditorViewModel.SelectDateListener,
             )
             categoryAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
             binding.spinnerCategory.adapter = categoryAdapter
+            viewModel.loadSelectedCategoryPosition()
         }
+
     }
 
     private fun setupPrioritiesSpinner() {
@@ -200,7 +206,9 @@ class NoteEditorFragment : Fragment(), EditorViewModel.SelectDateListener,
 
     override fun dialogClosed(success: Boolean?) {
         if (success == true) {
-            viewModel.loadCategoriesNames()
+            lifecycleScope.launch {
+                viewModel.loadCategoriesNames()
+            }
         } else if (success == false) {
             Toast.makeText(
                 requireContext(),

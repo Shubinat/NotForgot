@@ -17,7 +17,7 @@ import kotlinx.coroutines.*
 
 class LoginViewModel(application: Application) : AndroidViewModel(application) {
 
-    val repository = UserRepositoryImpl(application)
+    val repository = UserRepositoryImpl.getInstance(application)
 
     val authorizeUserUseCase = AuthorizeUserUseCase(repository)
 
@@ -35,6 +35,7 @@ class LoginViewModel(application: Application) : AndroidViewModel(application) {
     private val _loading = MutableLiveData<Boolean>()
     val loading: LiveData<Boolean>
         get() = _loading
+
 
     var successAuthorizationListener: SuccessAuthorizationListener? = null
 

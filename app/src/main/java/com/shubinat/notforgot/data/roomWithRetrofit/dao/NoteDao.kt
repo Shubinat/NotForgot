@@ -20,4 +20,7 @@ interface NoteDao {
 
     @Update(onConflict = OnConflictStrategy.REPLACE)
     fun editNote(note: Note)
+
+    @Query("DELETE FROM Note")
+    fun clear()
 }

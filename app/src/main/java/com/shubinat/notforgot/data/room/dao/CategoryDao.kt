@@ -4,6 +4,7 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import androidx.room.Update
 import com.shubinat.notforgot.data.room.entity.Category
 
 @Dao
@@ -16,4 +17,5 @@ interface CategoryDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     abstract fun addCategory(category: Category)
+
 }
