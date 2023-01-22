@@ -15,7 +15,7 @@ import com.shubinat.notforgot.domain.usecases.users.RegisterUserUseCase
 import kotlinx.coroutines.*
 
 class RegistrationViewModel(application: Application) : AndroidViewModel(application) {
-    val repository = UserRepositoryImpl(application)
+    val repository = UserRepositoryImpl.getInstance(application)
 
     val registerUserUseCase = RegisterUserUseCase(repository)
 
