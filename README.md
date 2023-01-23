@@ -36,10 +36,10 @@ Not Forgot! - это приложение которое поможет вам �
 * ViewBinding
 * Architecture Components (Lifecycle, LiveData, ViewModel, Room Persistence)
 * <a href="https://developer.android.com/guide/navigation/navigation-getting-started">Fragment Navigation</a>
-* <a href="https://github.com/Shubinat/NotForgotAPI">API, написанное мной на C#</a>
-* <a href="https://square.github.io/retrofit/">Retrofit для взаимодействия с API</a>
-* <a href="https://github.com/google/gson">Gson для серелизации Json</a>
-* <a href="https://developer.android.com/reference/androidx/work/WorkManager">WorkManager, для синхронизации данных при отсутствии интернета</a>
+* <a href="https://github.com/Shubinat/NotForgotAPI">API</a>, написанное мной на C#
+* <a href="https://square.github.io/retrofit/">Retrofit</a> для взаимодействия с API
+* <a href="https://github.com/google/gson">Gson</a> для серелизации Json
+* <a href="https://developer.android.com/reference/androidx/work/WorkManager">WorkManager</a> для синхронизации данных при отсутствии интернета
 
 ## Заметки
 
