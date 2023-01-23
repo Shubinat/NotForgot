@@ -13,7 +13,7 @@ Not Forgot! - это приложение которое поможет вам �
   <img src="https://github.com/Shubinat/NotForgotImages/blob/main/edit_note.jpg" width="150"/>
   <img src="https://github.com/Shubinat/NotForgotImages/blob/main/category_creation.jpg" width="150"/>
   <img src="https://github.com/Shubinat/NotForgotImages/blob/main/add_note.jpg" width="150"/>
-  
+  <img src="https://github.com/Shubinat/NotForgotImages/blob/main/sync.jpg" width="150"/>
 </div>
 
 ## Запуск проекта
