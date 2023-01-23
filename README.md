@@ -40,6 +40,7 @@ Not Forgot! - это приложение которое поможет вам �
 * <a href="https://square.github.io/retrofit/">Retrofit</a> для взаимодействия с API
 * <a href="https://github.com/google/gson">Gson</a> для серелизации Json
 * <a href="https://developer.android.com/reference/androidx/work/WorkManager">WorkManager</a> для синхронизации данных при отсутствии интернета
+* <a href="https://developer.android.com/kotlin/coroutines">Kotlin coroutines</a> для выполнения асинхронных задач
 
 ## Заметки
 
